@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "types": ["node"],
+    "module": "commonjs",
+  },
+  "include": ["**/*.js"],
+   "exclude": ["node_modules", "**/*.json", "**/*.md"]
+}
