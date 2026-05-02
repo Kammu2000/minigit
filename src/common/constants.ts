@@ -11,3 +11,5 @@ export const MODE_VS_TYPE = {
 } as const;
 
 export const INDEX_FILE_PATH = path.join(process.cwd(), ".minigit/index");
+
+export const EMPTY_OBJECT_READONLY = {};

@@ -1,8 +1,14 @@
 import { getFileHash } from "../core/object/getFileHash.js";
-import { HashId, HashOptions } from "../common/types.js";
+import { HashId } from "../common/types.js";
 
-const hashObjectCommand = (filePath: string, options: HashOptions): HashId => {
-  const hashId = getFileHash(filePath, options);
+const hashObjectCommand = (args: string[]): HashId => {
+  const [flag, filePath] = args;
+
+  if(!filePath || !flag || flag != "-w"){
+    throw new Error("Invalid command");
+  }
+  
+  const hashId = getFileHash(filePath, { write: true });
 
   console.log(hashId);
   return hashId;

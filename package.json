@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "description": "A minimal Git-like version control system built from scratch to understand how Git works internally.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc"
+  },
+  "bin": {
+    "minigit": "./dist/bin/minigit.js"
+  },
   "author": "Deepanshu Upadhyay",
   "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@types/node": "^25.6.0",
-    "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
 }

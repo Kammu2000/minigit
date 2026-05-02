@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import zlib from 'zlib';
-import { HashId } from '../../types';
+import { HashId } from '../../common/types.js';
 
 export const writeObject = (object: Buffer, sha: HashId): void => {
   const objectDir = path.join(".minigit/objects", sha.slice(0, 2));

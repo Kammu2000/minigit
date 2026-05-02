@@ -1,7 +1,7 @@
 import { add } from "../core/stage/add.js";
 
-const addCommand = (paths: string[]): void => {
-  add(paths);
+const addCommand = (args: string[]): void => {
+  add(args);
 }
 
 export default addCommand;

@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
-import { MODE_VS_TYPE } from '../../common/constants';
-import { HashId } from '../../common/types';
+import { MODE_VS_TYPE } from '../../common/constants.js';
+import { HashId } from '../../common/types.js';
 
 export const lsTree = (treeHash: HashId): void => {
   const objectDir = path.join(process.cwd(), ".minigit/objects", treeHash.slice(0, 2));
@@ -20,7 +20,7 @@ export const lsTree = (treeHash: HashId): void => {
 
   while(left < treeBody.length){
       const spaceIndex = treeBody.indexOf(' ', left);
-      const mode = treeBody.subarray(left, spaceIndex).toString("utf8");
+      const mode = treeBody.subarray(left, spaceIndex).toString("utf8") as keyof typeof MODE_VS_TYPE;
       nullIndex = treeBody.indexOf(0, left);
       const name = treeBody.subarray(spaceIndex + 1, nullIndex).toString("utf8");
       const hash = treeBody.subarray(nullIndex + 1, nullIndex + 21).toString("hex");

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export const init = (): string => {
+export const init = (): void => {
   const minigit = path.join(process.cwd(), ".minigit"); 
   const objects = path.join(minigit, "objects");
   const refs = path.join(minigit, "refs");
@@ -10,6 +10,6 @@ export const init = (): string => {
   fs.mkdirSync(refs, { recursive: true });
  
   fs.writeFileSync(path.join(minigit, "HEAD"), "ref: refs/heads/main\n")
-  return minigit; 
+  return;
 }
 

@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { parseCLI } from '../src/common/utils.js';
 
-const [, , command, ...args] = process.argv;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const { command, args } = parseCLI(); 
 
 if(!command){
   console.error("Error, no command specified");
@@ -11,8 +16,11 @@ if(!command){
 
 try {
   const commandPath = path.join(__dirname, "../src/commands/", `${command}.js`);
-  const commandFn = await import(commandPath);
-  commandFn(...args);
+  const module = await import(commandPath);
+
+  console.log(command, args);
+  const commandFn = module.default; 
+  commandFn(args);
 } catch (error) {
    console.error(error);  
 }

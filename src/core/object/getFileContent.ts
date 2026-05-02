@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
-import { HashId } from '../../common/types';
+import { HashId } from '../../common/types.js';
 
 export const getFileContent = (flag: string, hashId: HashId): Buffer<ArrayBuffer> => {
  if(flag !== "-p"){

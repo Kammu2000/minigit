@@ -1,4 +1,4 @@
-import { TreeEntry } from "../../types";
+import { TreeEntry } from "../../common/types.js";
 
 export const encodeTreeObject = (entries: TreeEntry[]): Buffer<ArrayBuffer> => {
   const buffers: Buffer[] = [];

@@ -1,10 +1,10 @@
 import { readFileSync} from 'fs';
 import { createHash } from 'crypto';
 import { Buffer } from 'buffer';
-import { writeObject } from './writeObject';
-import { HashId, HashOptions } from '../../common/types';
+import { writeObject } from './writeObject.js';
+import { HashId, HashOptions } from '../../common/types.js';
 
-export const getFileHash = (filePath: string, options: HashOptions): HashId => {
+export const getFileHash = (filePath: string, options?: HashOptions): HashId => {
   // step - 1: read file content 
   const content = readFileSync(filePath);
 
@@ -16,7 +16,7 @@ export const getFileHash = (filePath: string, options: HashOptions): HashId => {
   const fileSha = createHash("sha1").update(fileObject).digest("hex");
   
   // step - 4: store fileContent to objects if required
-  if(options.write){
+  if(options?.write){
     writeObject(fileObject, fileSha);
   }
   

@@ -1,7 +1,12 @@
 import { lsTree } from "../core/tree/lsTree.js";
-import { HashId } from "../common/types.js";
 
-const lsTreeCommand = (treeHash: HashId): void => {
+const lsTreeCommand = (args: string[]): void => {
+    const [treeHash] = args;
+
+    if(!treeHash){
+      throw new Error("Invalid command");
+    }
+
     lsTree(treeHash);
 }
 

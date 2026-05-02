@@ -4,42 +4,50 @@ import { getFileHash } from '../object/getFileHash.js';
 import { readIndex, writeIndex } from './index.js';
 import { MODE } from '../../common/constants.js';
 
-const addFile = (filePath: string): void => {
-  if(!fs.existsSync(filePath)){
-    throw new Error("Not a valid file path");
+const addFile = (filePath: string, root: string): void => {
+  const index = readIndex();
+  const relativePath = path.relative(root, filePath);
+
+  if(index.has(relativePath)){
+    index.delete(relativePath);
   }
 
-  const sha = getFileHash(filePath, { write: true });
-  const index = readIndex();
+  if(fs.existsSync(filePath)){
+    const sha = getFileHash(filePath, { write: true });
+    index.set(relativePath, { mode: MODE.BLOB, sha });
+  }
 
-  index.set(filePath, { mode: MODE.BLOB, sha });
   writeIndex(index);
   return;
 }
 
-const addFolder = (folderPath: string): void => {
+const addFolder = (folderPath: string, root: string): void => {
   for (const entityName of fs.readdirSync(folderPath)) {
     const p = path.join(folderPath, entityName);
     
     if(fs.statSync(p).isDirectory()){
-      addFolder(p);
+      addFolder(p, root);
     }
-    else addFile(p);
+    else addFile(p, root);
   }
 
   return;
 }
 
 export const add = (paths: string[]): void => {
-  for(const entityPath of paths){
+  const root = process.cwd();
+  
+  for(const relativePath of paths){
+    console.log(relativePath);
+
+    const entityPath = path.join(root, relativePath);
     const stats = fs.statSync(entityPath);
-    const absoluteEntityPath = path.join(process.cwd(), entityPath);
 
     if(stats.isDirectory()){
-      addFolder(absoluteEntityPath);  
+      addFolder(entityPath, root);  
     }
     else if(stats.isFile()){
-      addFile(absoluteEntityPath);
+      addFile(entityPath, root);
     }
   } 
 }

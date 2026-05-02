@@ -1,10 +1,10 @@
 import path from 'path';
 import { readdirSync, Dirent } from 'fs';
 import crypto from 'crypto';
-import { buildTreeEntries } from "./buildTree";
-import { encodeTreeObject } from "./encodeTree";
-import { writeObject } from '../object/writeObject';
-import { HashId } from '../../types';
+import { buildTreeEntries } from './buildTree.js';
+import { encodeTreeObject } from './encodeTree.js';
+import { writeObject } from '../object/writeObject.js';
+import { HashId } from '../../common/types.js';
 
 const getDirectoryItems = (dir: string): Dirent<string>[] => {
   const items = readdirSync(dir, { withFileTypes: true }).filter((item: Dirent<string>): boolean => item.name !== ".minigit" && item.name !== ".git");
@@ -12,7 +12,7 @@ const getDirectoryItems = (dir: string): Dirent<string>[] => {
   return items;
 };
 
-export const writeTree = (dir: string = process.cwd()): HashId => {
+export const writeTree = (dir: string): HashId => {
   dir = path.resolve(dir);
 
   const items = getDirectoryItems(dir);

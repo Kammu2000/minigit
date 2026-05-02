@@ -1,9 +1,9 @@
 import path from "path";
 import { Dirent } from "fs";
-import hashObject from "../object/getFileHash";
-import { writeTree } from "./writeTree";
-import { MODE } from "../../constants";
-import { TreeEntry } from "../../types";
+import { getFileHash } from "../object/getFileHash.js";
+import { writeTree } from "./writeTree.js";
+import { MODE } from "../../common/constants.js";
+import { TreeEntry } from "../../common/types.js";
 
 export const buildTreeEntries = (items: Dirent<string>[], dir: string): TreeEntry[] => {
   const entries: TreeEntry[] = [];
@@ -11,7 +11,7 @@ export const buildTreeEntries = (items: Dirent<string>[], dir: string): TreeEntr
   for(const item of items){
     if(item.isFile()){
       const filePath = path.join(dir, item.name);
-      const fileSha = hashObject(filePath, { write: true });
+      const fileSha = getFileHash(filePath, { write: true });
       entries.push({ mode: MODE.BLOB, name: item.name, sha: fileSha });
     }
     else if(item.isDirectory()){
