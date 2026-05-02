@@ -1,14 +1,15 @@
-const fs = require("node:fs");
-const { MODE } = require("../constants.js");
-const hashObject = require("../commands/hash-object");
-const { writeIndex, readIndex } = require("../core/index.js");
+import path from 'path';
+import fs from 'fs';
+import { getFileHash } from '../object/getFileHash.js';
+import { readIndex, writeIndex } from './index.js';
+import { MODE } from '../../common/constants.js';
 
-function addFile(filePath){
+const addFile = (filePath: string): void => {
   if(!fs.existsSync(filePath)){
     throw new Error("Not a valid file path");
   }
 
-  const sha = hashObject("-w", filePath);
+  const sha = getFileHash(filePath, { write: true });
   const index = readIndex();
 
   index.set(filePath, { mode: MODE.BLOB, sha });
@@ -16,7 +17,7 @@ function addFile(filePath){
   return;
 }
 
-function addFolder(folderPath){
+const addFolder = (folderPath: string): void => {
   for (const entityName of fs.readdirSync(folderPath)) {
     const p = path.join(folderPath, entityName);
     
@@ -29,7 +30,7 @@ function addFolder(folderPath){
   return;
 }
 
-function add(paths){
+export const add = (paths: string[]): void => {
   for(const entityPath of paths){
     const stats = fs.statSync(entityPath);
     const absoluteEntityPath = path.join(process.cwd(), entityPath);
@@ -43,4 +44,3 @@ function add(paths){
   } 
 }
 
-module.exports = add;

@@ -1,8 +1,9 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const zlib = require("node:zlib");
+import fs from 'fs';
+import path from 'path';
+import zlib from 'zlib';
+import { HashId } from '../../common/types';
 
-module.exports = (flag, hashId) => {
+export const getFileContent = (flag: string, hashId: HashId): Buffer<ArrayBuffer> => {
  if(flag !== "-p"){
     throw new Error("flag is not valid");
   } 
@@ -12,8 +13,8 @@ module.exports = (flag, hashId) => {
   const storedHashId = fs.readFileSync(objectFilePath);
   const blob = zlib.inflateSync(storedHashId);
   const nullIndex = blob.indexOf(0);
-  const content = blob.slice(nullIndex + 1);
+  const content = blob.subarray(nullIndex + 1);
 
-  process.stdout.write(`${content}\n`);
+  return content;
 }
 

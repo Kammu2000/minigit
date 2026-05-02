@@ -1,8 +1,7 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import fs from 'fs';
+import path from 'path';
 
-module.exports = () => {
-
+export const init = (): string => {
   const minigit = path.join(process.cwd(), ".minigit"); 
   const objects = path.join(minigit, "objects");
   const refs = path.join(minigit, "refs");
@@ -11,7 +10,6 @@ module.exports = () => {
   fs.mkdirSync(refs, { recursive: true });
  
   fs.writeFileSync(path.join(minigit, "HEAD"), "ref: refs/heads/main\n")
-  process.stdout.write("Initialized empty minigit repository in", minigit, "\n");
-  return; 
+  return minigit; 
 }
 

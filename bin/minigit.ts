@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const path = require("node:path");
+import path from 'path';
+
 const [, , command, ...args] = process.argv;
 
 if(!command){
@@ -10,7 +11,7 @@ if(!command){
 
 try {
   const commandPath = path.join(__dirname, "../src/commands/", `${command}.js`);
-  const commandFn = require(commandPath);
+  const commandFn = await import(commandPath);
   commandFn(...args);
 } catch (error) {
    console.error(error);  
