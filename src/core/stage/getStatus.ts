@@ -4,6 +4,7 @@ import { getFileHash } from "../object/getFileHash.js";
 import { readIndex } from "./index.js";
 import { EMPTY_OBJECT_READONLY } from "../../common/constants.js";
 import { FileStatus, IndexMap, StatusVsFilesMap, TreeEntry, HashId } from "../../common/types.js";
+import { getIgnoredPatterns, isIgnored } from "../../common/utils.js";
 
 const getFileStatus = (filePath: string, index: IndexMap): FileStatus => {
   const fileSha = getFileHash(filePath);
@@ -20,24 +21,28 @@ const getFileStatus = (filePath: string, index: IndexMap): FileStatus => {
   return FileStatus.UNTRACKED;
 };
 
-const collectWorkingFiles = (folderPath: string, root: string, files: Set<string>): void => {
+const collectWorkingFiles = (folderPath: string, root: string, files: Set<string>, ignoredPatterns: string[]): void => {
   for(const entityName of readdirSync(folderPath)){
     const entityPath = path.join(folderPath, entityName);
     const relativePath = path.relative(root, entityPath);
+
+    if(isIgnored(relativePath, ignoredPatterns)) continue;
+
     const stats = statSync(entityPath);
 
     if(stats.isDirectory()){
-      collectWorkingFiles(entityPath, root, files);
+      collectWorkingFiles(entityPath, root, files, ignoredPatterns);
     }
     else files.add(relativePath);
   }
 
-  return ;
+  return;
 };
 
 export const getStatus = (root: string): StatusVsFilesMap => {
+  const ignoredPatterns = getIgnoredPatterns(root);
   const workingFiles = new Set<string>();
-  collectWorkingFiles(root, root, workingFiles);
+  collectWorkingFiles(root, root, workingFiles, ignoredPatterns);
 
   const index = readIndex();
 

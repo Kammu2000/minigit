@@ -17,8 +17,6 @@ if(!command){
 try {
   const commandPath = path.join(__dirname, "../src/commands/", `${command}.js`);
   const module = await import(commandPath);
-
-  console.log(command, args);
   const commandFn = module.default; 
   commandFn(args);
 } catch (error) {

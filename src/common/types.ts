@@ -23,3 +23,8 @@ export enum FileStatus {
 
 export type StatusVsFilesMap = Record<FileStatus, string[]>;
 
+export type CLIInput = {
+  command: string;
+  args: string[];
+};
+
