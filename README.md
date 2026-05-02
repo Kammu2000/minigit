@@ -24,11 +24,11 @@ npm link
 | `minigit write-tree` | Snapshot the working directory as a tree object |
 | `minigit ls-tree <sha>` | List the contents of a tree object |
 | `minigit restore <file>` | Unstage a file |
+| `minigit status` | Check current working status of repository |
 
 ## What's Next
 
 - `commit` — create commit objects and wire up HEAD
 - `log` — walk the parent chain
-- `status` — diff working tree vs index vs HEAD
-- `diff` — compare file versions across commits
 - `branch` / `checkout` — first-class branch support
+- `diff` — compare file versions across commits
