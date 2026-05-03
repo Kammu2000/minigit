@@ -7,8 +7,7 @@ const catFileCommand = (args: string[]): void => {
     throw new Error("Invalid command");
   }
 
-  const content = getFileContent(flag, hashId);
-  console.log(`${content}\n`);
+  getFileContent(flag, hashId);
 }
 
 export default catFileCommand;

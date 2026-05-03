@@ -28,3 +28,21 @@ export type CLIInput = {
   args: string[];
 };
 
+export type BlobNode = {
+  name: string;
+  type: typeof MODE[keyof typeof MODE];
+  hashId: HashId;
+}
+
+export type TreeNode = {
+  name: string;
+  type: typeof MODE[keyof typeof MODE];
+  children: Array<TreeNode | BlobNode>;
+}
+
+export type ParsedObject = {
+  type: string;
+  size: number;
+  body: Buffer<ArrayBuffer>;
+}
+

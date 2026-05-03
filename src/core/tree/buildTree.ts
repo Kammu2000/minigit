@@ -1,26 +1,40 @@
-import path from "path";
-import { Dirent } from "fs";
-import { getFileHash } from "../object/getFileHash.js";
-import { writeTree } from "./writeTree.js";
+import { readIndex } from "../stage/index.js";
 import { MODE } from "../../common/constants.js";
-import { TreeEntry } from "../../common/types.js";
+import { BlobNode, TreeNode } from "../../common/types.js";
 
-export const buildTreeEntries = (items: Dirent<string>[], dir: string): TreeEntry[] => {
-  const entries: TreeEntry[] = [];
+export const buildTreeFromIndex = (): TreeNode => {
+  const index = readIndex();
+  const root: TreeNode = {
+    name: "root",
+    type: MODE.TREE,
+    children: []
+  };
 
-  for(const item of items){
-    if(item.isFile()){
-      const filePath = path.join(dir, item.name);
-      const fileSha = getFileHash(filePath, { write: true });
-      entries.push({ mode: MODE.BLOB, name: item.name, sha: fileSha });
-    }
-    else if(item.isDirectory()){
-      const dirPath = path.join(dir, item.name);
-      const sha = writeTree(dirPath);
-      entries.push({ mode: MODE.TREE, name: item.name, sha });
+  for(const [filePath, { mode:_, sha }] of index){
+    const parts = filePath.split('/');
+    const prev = root;
+
+    for(let i = 0; i < parts.length; i++){
+      if(i == parts.length - 1){
+        const node: BlobNode = {
+          hashId: sha,
+          name: parts[i] ?? "",
+          type: MODE.BLOB,
+        };
+
+        prev.children.push(node);
+        continue;
+      }
+
+      const node: TreeNode = {
+        name: parts[i] ?? "",
+        type: MODE.TREE,
+        children: []
+      };
+
+      prev.children.push(node);
     }
   }
-  
-  return entries;
-};
 
+  return root;
+};
