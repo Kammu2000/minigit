@@ -21,6 +21,15 @@ class Logger {
       this.log(line);
     }
   }
+
+  logBranchList(branches: string[], currentBranch: string | undefined): void {
+    for (const branch of branches) {
+        if(branch === currentBranch){
+        this.log(`* ${branch}`);
+      } 
+      else this.log(branch);
+     } 
+  }
 }
 
 export default new Logger();

@@ -2,13 +2,19 @@ import path, { dirname } from "path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { HashId } from "../../common/types.js";
 
-export const getHeadCommit = (): HashId | null => {
-  const root = process.cwd();
+export const getHeadContent = (root: string): string | null => {
   const headPath = path.join(root, ".minigit/HEAD");
-
   if(!existsSync(headPath)) return null;
 
-  const headContent = readFileSync(headPath, "utf8").trim();
+  return readFileSync(headPath, "utf8").trim();
+};
+
+export const getHeadCommit = (): HashId | null => {
+  const root = process.cwd();
+  const headContent = getHeadContent(root);
+
+  if(!headContent)
+    return null;
 
   // case-1: when user is on a branch
   if(headContent.startsWith("ref:")){
@@ -27,12 +33,11 @@ export const getHeadCommit = (): HashId | null => {
 
 export const updateHead = (commitId: HashId): void => {
   const root = process.cwd();
-  const headPath = path.join(root, ".minigit/HEAD");
+  const headContent = getHeadContent(root);
 
-  if(!existsSync(headPath)) return;
+  if(!headContent)
+    return;
 
-  const headContent = readFileSync(headPath, "utf8").trim();
-  
   // case-1
   if(headContent.startsWith("ref:")){
     const refPath = headContent.split(" ")[1];
@@ -46,6 +51,7 @@ export const updateHead = (commitId: HashId): void => {
   }
 
   // case-2
+  const headPath = path.join(root, ".minigit/HEAD");
   writeFileSync(headPath, commitId);
   return;
 };
