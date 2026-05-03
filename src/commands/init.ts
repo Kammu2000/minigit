@@ -1,20 +1,21 @@
 import path from 'path';
 import fs from 'fs';
 import { init } from '../core/init.js';
+import logger from '../common/helpers/logger.js';
 
 const initCommand = (): void => {
   const minigit = path.join(process.cwd(), ".minigit"); 
 
   if(fs.existsSync(minigit)){
-    console.log("Already a minigit repository");
+    logger.log("Already a minigit repository");
     return;
   }
 
   try {
     init();
-    console.log(`Initialized empty minigit repository in ${minigit}`);
+    logger.log(`Initialized empty minigit repository in ${minigit}`);
   } catch (error) {
-    console.log(error);  
+    logger.log(error);  
   }
   return; 
 }

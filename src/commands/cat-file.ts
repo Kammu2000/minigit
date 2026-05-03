@@ -1,4 +1,4 @@
-import { getFileContent } from '../core/object/getFileContent.js';
+import { logObjectInfo } from '../core/object/logObjectInfo.js';
 
 const catFileCommand = (args: string[]): void => {
   const [flag, hashId] = args;
@@ -7,7 +7,7 @@ const catFileCommand = (args: string[]): void => {
     throw new Error("Invalid command");
   }
 
-  getFileContent(flag, hashId);
+  logObjectInfo(flag, hashId);
 }
 
 export default catFileCommand;

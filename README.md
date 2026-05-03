@@ -18,17 +18,18 @@ npm link
 | Command | Description |
 |---|---|
 | `minigit init` | Initialize a new repository |
-| `minigit add <path>` | Stage a file or directory |
 | `minigit hash-object [-w] <file>` | Compute (and optionally store) a blob object |
 | `minigit cat-file -p <sha>` | Print the content of a stored object |
-| `minigit write-tree` | Snapshot the working directory as a tree object |
+| `minigit cat-file -t <sha>` | Print the type of a stored object |
+| `minigit write-tree` | Get updated sha of root directory using staged files |
 | `minigit ls-tree <sha>` | List the contents of a tree object |
+| `minigit add <path>` | Stage a file or directory |
 | `minigit restore <file>` | Unstage a file |
 | `minigit status` | Check current working status of repository |
+| `minigit commit` | Commit changes with the staged files |
 
 ## What's Next
 
-- `commit` — create commit objects and wire up HEAD
 - `log` — walk the parent chain
 - `branch` / `checkout` — first-class branch support
 - `diff` — compare file versions across commits

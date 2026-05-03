@@ -1,3 +1,4 @@
+import logger from "../common/helpers/logger.js";
 import { commit } from "../core/commit/commit.js";
 
 const commitCommand = (args: string[]): void => {
@@ -8,7 +9,7 @@ const commitCommand = (args: string[]): void => {
   }
 
   const commitId = commit(message);
-  console.log(`Committed changes with commit Id: ${commitId}`);
+  logger.log(`Committed changes with commit Id: ${commitId}`);
   return;
 }
 

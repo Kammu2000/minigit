@@ -3,7 +3,7 @@ import logger from '../../common/helpers/logger.js';
 import { decodeTreeObject } from '../tree/decodeTree.js';
 import { HashId } from '../../common/types.js';
 
-export const getFileContent = (flag: string, hashId: HashId): void => {
+export const logObjectInfo = (flag: string, hashId: HashId): void => {
   const { type, body } = readObject(hashId);
 
   if(flag === "-t"){
@@ -11,22 +11,24 @@ export const getFileContent = (flag: string, hashId: HashId): void => {
     return;
   }
 
-  if(flag === "-w"){
+  if(flag === "-p"){
     switch (type) {
       case "blob": {
         const content = body.toString("utf8");
         logger.logFile(content);
-        break;
+        return;
       }
         
       case "tree": {
         const entries = decodeTreeObject(body);
         logger.logTree(entries);
-        break;
+        return;
       }
 
       case "commit": {
-        break;
+        const lines = body.toString("utf8").split("\n");
+        logger.logCommit(lines);
+        return;
       }
 
       default: {

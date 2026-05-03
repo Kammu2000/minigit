@@ -2,10 +2,6 @@ import { MODE_VS_TYPE } from "../constants.js";
 import { TreeEntry } from "../types.js";
 
 class Logger {
-  constructor() {
-   
-  }
-
   log(value: any): void {
     console.log(value);
   }
@@ -16,11 +12,14 @@ class Logger {
 
   logTree(entries: TreeEntry[]): void {
     for(const { mode, name, sha } of entries){
-      this.log(`${mode} ${MODE_VS_TYPE[mode]} ${sha} ${name} \n`);
+      this.log(`${mode} ${MODE_VS_TYPE[mode]} ${sha} ${name}`);
     }
   }
 
-  logCommit(): void {
+  logCommit(lines: string[]): void {
+    for(const line of lines){
+      this.log(line);
+    }
   }
 }
 

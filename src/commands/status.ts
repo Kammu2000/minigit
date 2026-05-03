@@ -1,10 +1,11 @@
 import { getStatus } from "../core/stage/getStatus.js";
+import logger from "../common/helpers/logger.js";
 import { FileStatus, StatusVsFilesMap } from "../common/types.js";
 
 const printFiles = (prefix: string, files: string[]): void => {
   prefix = prefix ? `${prefix}: `: prefix;
   for(const file of files){
-    console.log(`${prefix}${file}`);
+    logger.log(`${prefix}${file}`);
   }
 };
 

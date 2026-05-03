@@ -1,4 +1,5 @@
 import { getFileHash } from "../core/object/getFileHash.js";
+import logger from "../common/helpers/logger.js";
 import { HashId } from "../common/types.js";
 
 const hashObjectCommand = (args: string[]): HashId => {
@@ -10,7 +11,7 @@ const hashObjectCommand = (args: string[]): HashId => {
   
   const hashId = getFileHash(filePath, { write: flag === "-w" ? true: false });
 
-  console.log(hashId);
+  logger.log(hashId);
   return hashId;
 }
 
