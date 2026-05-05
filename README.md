@@ -1,6 +1,6 @@
 # minigit
 
-A minimal implementation of git's core internals, built from scratch in Node.js to understand how git actually works under the hood.
+A minimal but useful implementation of git's core internals, built from scratch in Node.js using typescript to understand how git actually works under the hood.
 
 ## Why I Built This
 
@@ -23,13 +23,14 @@ npm link
 | `minigit cat-file -t <sha>` | Print the type of a stored object |
 | `minigit write-tree` | Get updated sha of root directory using staged files |
 | `minigit ls-tree <sha>` | List the contents of a tree object |
-| `minigit add <path>` | Stage a file or directory |
-| `minigit restore <file>` | Unstage a file |
+| `minigit add <filePath>` | Stage a file or directory |
+| `minigit restore <filePath>` | Unstage a file |
 | `minigit status` | Check current working status of repository |
 | `minigit commit` | Commit changes with the staged files |
+| `minigit log` | Check commit history of current branch in less pager |
+| `minigit branch` | List down all the branches |
 
 ## What's Next
 
-- `log` — walk the parent chain
-- `branch` / `checkout` — first-class branch support
+- `checkout` — first-class branch support
 - `diff` — compare file versions across commits
