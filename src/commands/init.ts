@@ -15,7 +15,7 @@ const initCommand = (): void => {
     init();
     logger.log(`Initialized empty minigit repository in ${minigit}`);
   } catch (error) {
-    logger.log(error);  
+    console.error(error);
   }
   return; 
 }

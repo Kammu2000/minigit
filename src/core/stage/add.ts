@@ -4,6 +4,7 @@ import { getFileHash } from '../object/getFileHash.js';
 import { readIndex, writeIndex } from './index.js';
 import { getIgnoredPatterns, isIgnored } from '../../common/utils.js';
 import { MODE } from '../../common/constants.js';
+import { removeFileFromIndex } from './remove.js';
 
 const addFile = (filePath: string, root: string, ignoredPatterns: string[]): void => {
   const relativePath = path.relative(root, filePath);
@@ -46,6 +47,12 @@ export const add = (paths: string[]): void => {
   
   for(const relativePath of paths){
     const entityPath = path.join(root, relativePath);
+
+    if(!fs.existsSync(entityPath)){
+      removeFileFromIndex(relativePath);
+      continue;
+    }
+
     const stats = fs.statSync(entityPath);
     
     if(isIgnored(relativePath, ignoredPatterns)) continue;

@@ -19,7 +19,16 @@ try {
   const module = await import(commandPath);
   const commandFn = module.default; 
   commandFn(args);
-} catch (error) {
-   console.error(error);  
+} catch (error: any) {
+  switch(error.code){
+    case "ERR_MODULE_NOT_FOUND": {
+        console.log(`minigit: ${command} is not a minigit command`);
+        break;
+    }
+
+    default: {
+      console.log(`Unknown error occured: ${error.message}]`);
+    }
+  }
 }
 

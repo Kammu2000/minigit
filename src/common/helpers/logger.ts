@@ -1,9 +1,13 @@
 import { MODE_VS_TYPE } from "../constants.js";
-import { TreeEntry } from "../types.js";
+import { TreeEntry, FileSubStatus } from "../types.js";
 
 class Logger {
-  log(value: any): void {
-    console.log(value);
+  log(value: string, followThrough?: string): void {
+    process.stdout.write(value);
+
+    if(followThrough){
+      process.stdout.write(followThrough);
+    }
   }
 
   logFile(content: string): void {
@@ -12,24 +16,28 @@ class Logger {
 
   logTree(entries: TreeEntry[]): void {
     for(const { mode, name, sha } of entries){
-      this.log(`${mode} ${MODE_VS_TYPE[mode]} ${sha} ${name}`);
-    }
-  }
-
-  logCommit(lines: string[]): void {
-    for(const line of lines){
-      this.log(line);
+      this.log(`${mode} ${MODE_VS_TYPE[mode]} ${sha} ${name}`, "\n");
     }
   }
 
   logBranchList(branches: string[], currentBranch: string | undefined): void {
     for (const branch of branches) {
         if(branch === currentBranch){
-        this.log(`* ${branch}`);
+        this.log(`* ${branch}`, "\n");
       } 
       else this.log(branch);
      } 
   }
+
+  logStatusFiles(files: [FileSubStatus, string][]): void {
+    for(const file of files){
+      const message = file[0] ? `${file[0]}: ${file[1]}`: file[1];
+      this.log(message, "\n");
+    }
+
+    this.log("\n");
+    return;
+  };
 }
 
 export default new Logger();

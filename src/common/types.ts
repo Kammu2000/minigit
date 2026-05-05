@@ -13,15 +13,22 @@ export type TreeEntry = {
 }
 
 export type IndexMap = Map<string, { mode: TreeEntry['mode'], sha: HashId }>;
+export type HeadpMap = Map<string, string>;
 
 export enum FileStatus {
-  MODIFIED =  "MODIFIED",
+  WORKING_DIR =  "WORKING_DIR",
   STAGED = "STAGED",
-  UNTRACKED = "UNTRACKED",
-  DELETED = "DELETED"
+  UNTRACKED = "UNTRACKED"
 };
 
-export type StatusVsFilesMap = Record<FileStatus, string[]>;
+export enum FileSubStatus {
+  NEW_FILE = "newFile",
+  DELETED = "deleted",
+  MODIFIED = "modified",
+  UNTRACKED = "",
+};
+
+export type StatusVsFilesMap = Record<FileStatus, [FileSubStatus, string][]>;
 
 export type CLIInput = {
   command: string;

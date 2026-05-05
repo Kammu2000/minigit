@@ -26,8 +26,8 @@ export const logObjectInfo = (flag: string, hashId: HashId): void => {
       }
 
       case "commit": {
-        const lines = body.toString("utf8").split("\n");
-        logger.logCommit(lines);
+        const content = body.toString("utf8");
+        logger.log(content);
         return;
       }
 

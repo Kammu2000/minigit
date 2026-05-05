@@ -1,25 +1,10 @@
 import { readdirSync, statSync } from "fs";
 import path from 'path';
-import { getFileHash } from "../object/getFileHash.js";
 import { readIndex } from "./index.js";
-import { EMPTY_OBJECT_READONLY } from "../../common/constants.js";
-import { FileStatus, IndexMap, StatusVsFilesMap, TreeEntry, HashId } from "../../common/types.js";
 import { getIgnoredPatterns, isIgnored } from "../../common/utils.js";
-
-const getFileStatus = (filePath: string, index: IndexMap): FileStatus => {
-  const fileSha = getFileHash(filePath);
-  const { mode:_, sha } = index.get(filePath) ?? EMPTY_OBJECT_READONLY as { mode: TreeEntry['mode'], sha: HashId };
-
-  if(sha){
-    if(sha === fileSha)
-      return FileStatus.STAGED;
-
-    if(sha !== fileSha)
-      return FileStatus.MODIFIED;
-  }
-
-  return FileStatus.UNTRACKED;
-};
+import { getHeadMap } from "../commit/utils.js";
+import { getFileHash } from "../object/getFileHash.js";
+import { FileStatus, FileSubStatus, StatusVsFilesMap } from "../../common/types.js";
 
 const collectWorkingFiles = (folderPath: string, root: string, files: Set<string>, ignoredPatterns: string[]): void => {
   for(const entityName of readdirSync(folderPath)){
@@ -45,25 +30,47 @@ export const getStatus = (root: string): StatusVsFilesMap => {
   collectWorkingFiles(root, root, workingFiles, ignoredPatterns);
 
   const index = readIndex();
+  const headMap = getHeadMap();
 
-  const statusVsFiles: StatusVsFilesMap = {
-    [FileStatus.MODIFIED]: [],
-    [FileStatus.STAGED]: [],
-    [FileStatus.DELETED]: [],
-    [FileStatus.UNTRACKED]: [],
+  const statusVsFilesMap: StatusVsFilesMap = {
+    WORKING_DIR: [],
+    STAGED: [],
+    UNTRACKED: []
   };
 
-  for(const filePath of workingFiles){
-      const fileStatus = getFileStatus(filePath, index);
-      statusVsFiles[fileStatus].push(filePath);
+  const allFiles = new Set([...workingFiles, ...index.keys(), ...headMap.keys()]);
+
+  for(const filePath of allFiles){
+    // case-1: file is not in index but present in workingFiles
+    if(!index.has(filePath) && workingFiles.has(filePath)){
+      statusVsFilesMap[FileStatus.UNTRACKED].push([FileSubStatus.UNTRACKED, filePath]);
+    }
+
+    // case-2: file is present in index but not in workingFiles
+    if(index.has(filePath) && !workingFiles.has(filePath)){
+      statusVsFilesMap[FileStatus.WORKING_DIR].push([FileSubStatus.DELETED, filePath]);
+    }
+
+    // case-3: file is present in index and in workingFiles but sha is different
+    if(index.has(filePath) && workingFiles.has(filePath)){
+      const fileSha = getFileHash(filePath);
+
+      if(index.get(filePath)?.sha != fileSha){
+        statusVsFilesMap[FileStatus.WORKING_DIR].push([FileSubStatus.MODIFIED, filePath]);
+      }
+    }
+
+    // case-4: file is not present in headMap but present in index
+    if(!headMap.has(filePath) && index.has(filePath)){
+      statusVsFilesMap[FileStatus.STAGED].push([FileSubStatus.NEW_FILE, filePath]);
+    }
+
+    // case-5: file is present in headMap but not in workingFiles and index
+    if(headMap.has(filePath) && !index.has(filePath) && !workingFiles.has(filePath)){
+      statusVsFilesMap[FileStatus.STAGED].push([FileSubStatus.DELETED, filePath]);
+    }
   }
 
-  for(const filePath of index.keys()){
-    if(workingFiles.has(filePath))
-      continue;
-
-    statusVsFiles[FileStatus.DELETED].push(filePath);
-  }
-
-  return statusVsFiles;
+  return statusVsFilesMap; 
 };
+

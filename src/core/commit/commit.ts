@@ -8,7 +8,7 @@ export const commit = (message: string): HashId => {
   const treeSha = writeTreeFromIndex();
   const parentCommitId = getHeadCommit();
 
-  const lines = [`tree ${treeSha}`, `parent ${parentCommitId}`, `author Deepanshu Upadhyay`, `time ${Date.now()}`, "", message]
+  const lines = [`tree ${treeSha}`, `parent ${parentCommitId}`, `author Deepanshu Upadhyay`, `Date ${new Date().toString()}`, "", message]
   const commitBody = lines.join("\n");
 
   const commitObject = Buffer.from(`commit ${commitBody.length}\0${commitBody}`);
