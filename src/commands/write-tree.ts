@@ -4,7 +4,7 @@ import { HashId } from '../common/types.js';
 
 const writeTreeCommand = (): HashId => {
   const treeSha = writeTreeFromIndex();
-  logger.log(`${treeSha}`); 
+  logger.log(`${treeSha}`, "\n"); 
   return treeSha;
 }
 

@@ -9,7 +9,7 @@ export const logObjectInfo = (flag: string, hashId: HashId): void => {
   const { type, body } = readObject(hashId);
 
   if(flag === "-t"){
-    logger.log(type);
+    logger.log(type, "\n");
     return;
   }
 
@@ -29,7 +29,7 @@ export const logObjectInfo = (flag: string, hashId: HashId): void => {
 
       case "commit": {
         const content = body.toString("utf8");
-        logger.log(content);
+        logger.log(content, "\n");
         return;
       }
 

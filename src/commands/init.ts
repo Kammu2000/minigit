@@ -7,13 +7,13 @@ const initCommand = (): void => {
   const minigit = path.join(process.cwd(), ".minigit"); 
 
   if(fs.existsSync(minigit)){
-    logger.log("Already a minigit repository");
+    logger.log("Already a minigit repository", "\n");
     return;
   }
 
   try {
     init();
-    logger.log(`Initialized empty minigit repository in ${minigit}`);
+    logger.log(`Initialized empty minigit repository in ${minigit}`, "\n");
   } catch (error) {
     console.error(error);
   }

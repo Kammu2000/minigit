@@ -83,17 +83,17 @@ export const getHeadMap = (): HeadpMap => {
 
   const { body } = readObject(commitId);
   const lines = body.toString("utf8").split("\n");
-  const [treesha]= lines.map((line: string): string | undefined => {
+  const [treeSha]= lines.map((line: string): string | undefined => {
     if(line.trim().startsWith("tree"))
       return line.split(" ")[1]; 
 
     return "";
   }).filter(Boolean);
 
-  if(!treesha)
+  if(!treeSha)
     return headMap;
 
-  buildHeadMap(treesha, "", headMap);
+  buildHeadMap(treeSha, "", headMap);
   return headMap;
 };
 

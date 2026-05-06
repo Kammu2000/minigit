@@ -11,11 +11,11 @@ class Logger {
   }
 
   logError(message: string): void {
-    process.stderr.write(message);
+    process.stderr.write(`${message}\n`);
   }
 
   logFile(content: string): void {
-    this.log(content);
+    this.log(content, "\n");
   }
 
   logTree(entries: TreeEntry[]): void {
@@ -29,7 +29,7 @@ class Logger {
         if(branch === currentBranch){
         this.log(`* ${branch}`, "\n");
       } 
-      else this.log(branch);
+      else this.log(branch, "\n");
      } 
   }
 

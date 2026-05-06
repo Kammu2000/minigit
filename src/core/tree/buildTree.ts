@@ -4,35 +4,47 @@ import { BlobNode, TreeNode } from "../../common/types.js";
 
 export const buildTreeFromIndex = (): TreeNode => {
   const index = readIndex();
+
   const root: TreeNode = {
     name: "root",
     type: MODE.TREE,
-    children: []
+    children: [],
   };
 
-  for(const [filePath, { mode:_, sha }] of index){
-    const parts = filePath.split('/');
-    const prev = root;
+  for (const [filePath, { sha }] of index) {
+    const parts = filePath.split("/");
+    let current = root;
 
-    for(let i = 0; i < parts.length; i++){
-      if(i == parts.length - 1){
-        const node: BlobNode = {
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+
+      if (i === parts.length - 1) {
+        const fileNode: BlobNode = {
           hashId: sha,
-          name: parts[i] ?? "",
+          name: part ?? "",
           type: MODE.BLOB,
         };
 
-        prev.children.push(node);
+        current.children.push(fileNode);
         continue;
       }
 
-      const node: TreeNode = {
-        name: parts[i] ?? "",
-        type: MODE.TREE,
-        children: []
-      };
+      // check if folder already exists
+      let next = current.children.find(
+        (child: TreeNode | BlobNode): boolean => child.type === MODE.TREE && child.name === part
+      ) as TreeNode | undefined;
 
-      prev.children.push(node);
+      // if not → create
+      if (!next) {
+        next = {
+          name: part ?? "",
+          type: MODE.TREE,
+          children: [],
+        };
+        current.children.push(next);
+      }
+
+      current = next;
     }
   }
 

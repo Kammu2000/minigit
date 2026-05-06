@@ -12,7 +12,7 @@ const hashObjectCommand = (args: string[]): HashId => {
   
   const hashId = getFileHash(filePath, { write: flag === "-w" ? true: false });
 
-  logger.log(hashId);
+  logger.log(hashId, "\n");
   return hashId;
 }
 
