@@ -15,3 +15,9 @@ export const INDEX_FILE_PATH = path.join(process.cwd(), ".minigit/index");
 export const EMPTY_OBJECT_READONLY = {};
 
 export const HASH_ID_LENGTH = 20;
+
+export enum OBJECT_TYPE {
+  BLOB = "BLOB",
+  TREE = "TREE",
+  COMMIT = "COMMIT",
+}

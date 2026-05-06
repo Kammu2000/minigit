@@ -10,6 +10,10 @@ class Logger {
     }
   }
 
+  logError(message: string): void {
+    process.stderr.write(message);
+  }
+
   logFile(content: string): void {
     this.log(content);
   }

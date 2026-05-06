@@ -2,6 +2,8 @@ import { readObject } from './readObject.js';
 import logger from '../../common/helpers/logger.js';
 import { decodeTreeObject } from '../tree/decodeTree.js';
 import { HashId } from '../../common/types.js';
+import { ObjectCorruptedError } from '../../common/helpers/errors/object.js';
+import { InvalidCommandError } from '../../common/helpers/errors/minigit.js';
 
 export const logObjectInfo = (flag: string, hashId: HashId): void => {
   const { type, body } = readObject(hashId);
@@ -32,11 +34,11 @@ export const logObjectInfo = (flag: string, hashId: HashId): void => {
       }
 
       default: {
-        throw new Error(`Unknown object type: ${type}`);
+        throw new ObjectCorruptedError(hashId);
       }
     }
   }
 
-  throw new Error(`${flag} is not a valid flag`);
+  throw new InvalidCommandError(`${flag} flag does not exist on command`);
 }
 
