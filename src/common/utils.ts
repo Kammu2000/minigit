@@ -1,7 +1,7 @@
-import path from 'path';
-import { readFileSync } from 'fs';
-import logger from './helpers/logger.js';
-import { CLIInput } from './types.js';
+import path from "path";
+import { readFileSync } from "fs";
+import logger from "./helpers/logger.js";
+import { CLIInput } from "./types.js";
 
 export const parseCLI = (): CLIInput => {
   const [command, ...args] = process.argv.slice(2);
@@ -25,16 +25,15 @@ export const getIgnoredPatterns = (root: string): string[] => {
   return patterns;
 };
 
-
-export const isIgnored = (entityPath: string, patterns: string[]): boolean => patterns.some((pattern: string): boolean => {
-
-    if(pattern.endsWith("/")){
+export const isIgnored = (entityPath: string, patterns: string[]): boolean =>
+  patterns.some((pattern: string): boolean => {
+    if (pattern.endsWith("/")) {
       return entityPath.startsWith(pattern.slice(0, -1));
     }
 
-    if(pattern.startsWith("*.")){
+    if (pattern.startsWith("*.")) {
       return entityPath.endsWith(pattern.slice(1));
     }
 
     return entityPath === pattern;
-});
+  });

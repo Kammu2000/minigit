@@ -1,12 +1,12 @@
-import path from 'path';
-import fs from 'fs';
-import { init } from '../core/init.js';
-import logger from '../common/helpers/logger.js';
+import path from "path";
+import fs from "fs";
+import { init } from "../core/init.js";
+import logger from "../common/helpers/logger.js";
 
 const initCommand = (): void => {
-  const minigit = path.join(process.cwd(), ".minigit"); 
+  const minigit = path.join(process.cwd(), ".minigit");
 
-  if(fs.existsSync(minigit)){
+  if (fs.existsSync(minigit)) {
     logger.log("Already a minigit repository", "\n");
     return;
   }
@@ -17,7 +17,7 @@ const initCommand = (): void => {
   } catch (error) {
     console.error(error);
   }
-  return; 
-}
+  return;
+};
 
 export default initCommand;

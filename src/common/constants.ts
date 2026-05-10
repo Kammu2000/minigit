@@ -1,8 +1,8 @@
-import path from 'path';
+import path from "path";
 
 export const MODE = {
-  BLOB: "100644", 
-  TREE: "040000"
+  BLOB: "100644",
+  TREE: "040000",
 } as const;
 
 export const MODE_VS_TYPE = {

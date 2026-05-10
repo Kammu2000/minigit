@@ -31,7 +31,8 @@ export const buildTreeFromIndex = (): TreeNode => {
 
       // check if folder already exists
       let next = current.children.find(
-        (child: TreeNode | BlobNode): boolean => child.type === MODE.TREE && child.name === part
+        (child: TreeNode | BlobNode): boolean =>
+          child.type === MODE.TREE && child.name === part,
       ) as TreeNode | undefined;
 
       // if not → create

@@ -1,26 +1,26 @@
-import { readObject } from './readObject.js';
-import logger from '../../common/helpers/logger.js';
-import { decodeTreeObject } from '../tree/decodeTree.js';
-import { HashId } from '../../common/types.js';
-import { ObjectCorruptedError } from '../../common/helpers/errors/object.js';
-import { InvalidCommandError } from '../../common/helpers/errors/minigit.js';
+import { readObject } from "./readObject.js";
+import logger from "../../common/helpers/logger.js";
+import { decodeTreeObject } from "../tree/decodeTree.js";
+import { HashId } from "../../common/types.js";
+import { ObjectCorruptedError } from "../../common/helpers/errors/object.js";
+import { InvalidCommandError } from "../../common/helpers/errors/minigit.js";
 
 export const logObjectInfo = (flag: string, hashId: HashId): void => {
   const { type, body } = readObject(hashId);
 
-  if(flag === "-t"){
+  if (flag === "-t") {
     logger.log(type, "\n");
     return;
   }
 
-  if(flag === "-p"){
+  if (flag === "-p") {
     switch (type) {
       case "blob": {
         const content = body.toString("utf8");
         logger.logFile(content);
         return;
       }
-        
+
       case "tree": {
         const entries = decodeTreeObject(body);
         logger.logTree(entries);
@@ -40,5 +40,4 @@ export const logObjectInfo = (flag: string, hashId: HashId): void => {
   }
 
   throw new InvalidCommandError(`${flag} flag does not exist on command`);
-}
-
+};

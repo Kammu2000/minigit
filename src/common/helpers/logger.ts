@@ -5,7 +5,7 @@ class Logger {
   log(value: string, followThrough?: string): void {
     process.stdout.write(value);
 
-    if(followThrough){
+    if (followThrough) {
       process.stdout.write(followThrough);
     }
   }
@@ -19,29 +19,28 @@ class Logger {
   }
 
   logTree(entries: TreeEntry[]): void {
-    for(const { mode, name, sha } of entries){
+    for (const { mode, name, sha } of entries) {
       this.log(`${mode} ${MODE_VS_TYPE[mode]} ${sha} ${name}`, "\n");
     }
   }
 
   logBranchList(branches: string[], currentBranch: string | undefined): void {
     for (const branch of branches) {
-        if(branch === currentBranch){
+      if (branch === currentBranch) {
         this.log(`* ${branch}`, "\n");
-      } 
-      else this.log(branch, "\n");
-     } 
+      } else this.log(branch, "\n");
+    }
   }
 
   logStatusFiles(files: [FileSubStatus, string][]): void {
-    for(const file of files){
-      const message = file[0] ? `${file[0]}: ${file[1]}`: file[1];
+    for (const file of files) {
+      const message = file[0] ? `${file[0]}: ${file[1]}` : file[1];
       this.log(message, "\n");
     }
 
     this.log("\n");
     return;
-  };
+  }
 }
 
 export default new Logger();

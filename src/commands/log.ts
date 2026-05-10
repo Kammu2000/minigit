@@ -5,11 +5,11 @@ const logCommand = () => {
   const commitsLog = getCommitsLog();
 
   const less = spawn("less", ["-R"], {
-      stdio: ["pipe", "inherit", "inherit"]
-    });
+    stdio: ["pipe", "inherit", "inherit"],
+  });
 
   less.stdin.write(commitsLog);
   less.stdin.end();
-}
+};
 
 export default logCommand;
