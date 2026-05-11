@@ -29,8 +29,9 @@ npm link
 | `minigit commit`                  | Commit changes with the staged files                 |
 | `minigit log`                     | Check commit history of current branch in less pager |
 | `minigit branch`                  | List down all the branches                           |
+| `minigit diff`                    | compare files in index vs working area               |
 
 ## What's Next
 
+- `diff --staged` — compare files in index vs head commit 
 - `checkout` — first-class branch support
-- `diff` — compare file versions across commits
