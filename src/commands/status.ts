@@ -1,6 +1,7 @@
 import { getStatus } from "../core/stage/getStatus.js";
 import logger from "../common/helpers/logger.js";
 import { FileStatus, StatusVsFilesMap } from "../common/types.js";
+import { green, red } from "../common/helpers/colors.js";
 
 const statusCommand = (): void => {
   const root = process.cwd();
@@ -11,17 +12,17 @@ const statusCommand = (): void => {
 
     switch (status) {
       case FileStatus.WORKING_DIR: {
-        logger.log("Changes not staged for commit: ", "\n\n");
+        logger.logWithNewLine("Changes not staged for commit: ");
         break;
       }
 
       case FileStatus.STAGED: {
-        logger.log("Changes to be committed: ", "\n\n");
+        logger.logWithNewLine("Changes to be committed: ");
         break;
       }
 
       case FileStatus.UNTRACKED: {
-        logger.log("Untracked files: ", "\n\n");
+        logger.logWithNewLine("Untracked files: ");
         break;
       }
 
@@ -29,7 +30,8 @@ const statusCommand = (): void => {
         break;
     }
 
-    logger.logStatusFiles(files);
+    const colorWrapper = status === FileStatus.STAGED ? green : red;
+    logger.logStatusFiles(files, colorWrapper);
   }
 };
 

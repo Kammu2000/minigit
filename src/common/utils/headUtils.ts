@@ -1,9 +1,9 @@
 import path, { dirname } from "path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { HashId, HeadpMap } from "../../common/types.js";
-import { readObject } from "../object/readObject.js";
-import { decodeTreeObject } from "../tree/decodeTree.js";
+import { readObject } from "../../core/object/readObject.js";
+import { decodeTreeObject } from "../../core/tree/decodeTree.js";
 import { MODE } from "../../common/constants.js";
+import { HashId, HeadpMap } from "../../common/types.js";
 
 export const getHeadContent = (root: string): string | null => {
   const headPath = path.join(root, ".minigit/HEAD");
@@ -77,7 +77,7 @@ const buildHeadMap = (
   return;
 };
 
-export const getHeadMap = (): HeadpMap => {
+export const computeHeadMap = (): HeadpMap => {
   const headMap: HeadpMap = new Map();
   const commitId = getHeadCommit();
 

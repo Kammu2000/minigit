@@ -1,5 +1,5 @@
 import { readObject } from "../object/readObject.js";
-import { getHeadCommit } from "./utils.js";
+import { getHeadCommit } from "../../common/utils/headUtils.js";
 
 const getCommitLog = (lines: string[], hashId: string): string => {
   const commitHeader = `commit ${hashId}`;

@@ -16,7 +16,7 @@ const hashObjectCommand = (args: string[]): HashId => {
     write: flag === "-w" ? true : false,
   });
 
-  logger.log(hashId, "\n");
+  logger.logWithNewLine(hashId);
   return hashId;
 };
 

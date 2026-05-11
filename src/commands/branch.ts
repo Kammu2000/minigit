@@ -1,6 +1,6 @@
 import logger from "../common/helpers/logger.js";
 import { getBranchList } from "../core/commit/getBranchList.js";
-import { getHeadContent } from "../core/commit/utils.js";
+import { getHeadContent } from "../common/utils/headUtils.js";
 
 const branchCommand = (): void => {
   const root = process.cwd();

@@ -21,3 +21,10 @@ export enum OBJECT_TYPE {
   TREE = "TREE",
   COMMIT = "COMMIT",
 }
+
+export enum COLORS {
+  RESET = "\x1b[0m",
+  RED = "\x1b[31m",
+  GREEN = "\x1b[32m",
+  BOLD = "\x1b[1m",
+}

@@ -12,7 +12,7 @@ const commitCommand = (args: string[]): void => {
   }
 
   const commitId = commit(message);
-  logger.log(`Committed changes with commit Id: ${commitId}`, "\n");
+  logger.logWithNewLine(`Committed changes with commit Id: ${commitId}`);
   return;
 };
 

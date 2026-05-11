@@ -1,4 +1,5 @@
 import { MODE } from "./constants.js";
+import { red } from "./helpers/colors.js";
 
 export type HashId = string;
 
@@ -13,7 +14,7 @@ export type TreeEntry = {
 };
 
 export type IndexMap = Map<string, { mode: TreeEntry["mode"]; sha: HashId }>;
-export type HeadpMap = Map<string, string>;
+export type HeadpMap = Map<string, HashId>;
 
 export enum FileStatus {
   WORKING_DIR = "WORKING_DIR",
@@ -63,3 +64,5 @@ export type Edit = {
   content: string;
   position: EditPosition;
 };
+
+export type ColorWrapperFn = typeof red;

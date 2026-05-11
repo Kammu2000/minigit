@@ -1,44 +1,20 @@
-import { readdirSync, statSync } from "fs";
-import path from "path";
 import { readIndex } from "./index.js";
-import { getIgnoredPatterns, isIgnored } from "../../common/utils.js";
-import { getHeadMap } from "../commit/utils.js";
-import { getFileHash } from "../object/getFileHash.js";
+import { getIgnoredPatterns } from "../../common/utils/ignoreFileUtils.js";
+import { computeHeadMap } from "../../common/utils/headUtils.js";
 import {
   FileStatus,
   FileSubStatus,
   StatusVsFilesMap,
 } from "../../common/types.js";
-
-const collectWorkingFiles = (
-  folderPath: string,
-  root: string,
-  files: Set<string>,
-  ignoredPatterns: string[],
-): void => {
-  for (const entityName of readdirSync(folderPath)) {
-    const entityPath = path.join(folderPath, entityName);
-    const relativePath = path.relative(root, entityPath);
-
-    if (isIgnored(relativePath, ignoredPatterns)) continue;
-
-    const stats = statSync(entityPath);
-
-    if (stats.isDirectory()) {
-      collectWorkingFiles(entityPath, root, files, ignoredPatterns);
-    } else files.add(relativePath);
-  }
-
-  return;
-};
+import { computeWorkTreeMap } from "../../common/utils/workTreeUtils.js";
 
 export const getStatus = (root: string): StatusVsFilesMap => {
   const ignoredPatterns = getIgnoredPatterns(root);
-  const workingFiles = new Set<string>();
-  collectWorkingFiles(root, root, workingFiles, ignoredPatterns);
+  const workTreeMap = new Map();
+  computeWorkTreeMap(root, root, workTreeMap, ignoredPatterns);
 
   const index = readIndex();
-  const headMap = getHeadMap();
+  const headMap = computeHeadMap();
 
   const statusVsFilesMap: StatusVsFilesMap = {
     WORKING_DIR: [],
@@ -47,14 +23,14 @@ export const getStatus = (root: string): StatusVsFilesMap => {
   };
 
   const allFiles = new Set([
-    ...workingFiles,
+    ...workTreeMap.keys(),
     ...index.keys(),
     ...headMap.keys(),
   ]);
 
   for (const filePath of allFiles) {
     // case-1: file is not in index but present in workingFiles
-    if (!index.has(filePath) && workingFiles.has(filePath)) {
+    if (!index.has(filePath) && workTreeMap.has(filePath)) {
       statusVsFilesMap[FileStatus.UNTRACKED].push([
         FileSubStatus.UNTRACKED,
         filePath,
@@ -62,7 +38,7 @@ export const getStatus = (root: string): StatusVsFilesMap => {
     }
 
     // case-2: file is present in index but not in workingFiles
-    if (index.has(filePath) && !workingFiles.has(filePath)) {
+    if (index.has(filePath) && !workTreeMap.has(filePath)) {
       statusVsFilesMap[FileStatus.WORKING_DIR].push([
         FileSubStatus.DELETED,
         filePath,
@@ -70,8 +46,8 @@ export const getStatus = (root: string): StatusVsFilesMap => {
     }
 
     // case-3: file is present in index and in workingFiles but sha is different
-    if (index.has(filePath) && workingFiles.has(filePath)) {
-      const fileSha = getFileHash(filePath);
+    if (index.has(filePath) && workTreeMap.has(filePath)) {
+      const fileSha = workTreeMap.get(filePath);
 
       if (index.get(filePath)?.sha != fileSha) {
         statusVsFilesMap[FileStatus.WORKING_DIR].push([
@@ -93,10 +69,22 @@ export const getStatus = (root: string): StatusVsFilesMap => {
     if (
       headMap.has(filePath) &&
       !index.has(filePath) &&
-      !workingFiles.has(filePath)
+      !workTreeMap.has(filePath)
     ) {
       statusVsFilesMap[FileStatus.STAGED].push([
         FileSubStatus.DELETED,
+        filePath,
+      ]);
+    }
+
+    // case-6: file is present in headMap and in index but hash is different
+    if (
+      headMap.has(filePath) &&
+      index.has(filePath) &&
+      headMap.get(filePath) != index.get(filePath)?.sha
+    ) {
+      statusVsFilesMap[FileStatus.STAGED].push([
+        FileSubStatus.MODIFIED,
         filePath,
       ]);
     }

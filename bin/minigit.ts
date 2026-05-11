@@ -2,7 +2,7 @@
 
 import path from "path";
 import { fileURLToPath } from "url";
-import { parseCLI } from "../src/common/utils.js";
+import { parseCLI } from "../src/common/utils/cliUtils.js";
 import { handleError } from "../src/common/helpers/errorHandler.js";
 
 const __filename = fileURLToPath(import.meta.url);
