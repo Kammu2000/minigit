@@ -1,12 +1,12 @@
 import { readIndex } from "../index/index.js";
-import { getIgnoredPatterns } from "../../common/utils/ignoreFileUtils.js";
-import { computeHeadMap } from "../../common/utils/headUtils.js";
+import { getIgnoredPatterns } from "./ignoreFileUtils.js";
+import { computeHeadMap } from "../head/computeHeadMap.js";
 import {
   FileStatus,
   FileSubStatus,
   StatusVsFilesMap,
 } from "../../common/types.js";
-import { computeWorkTreeMap } from "../../common/utils/workTreeUtils.js";
+import { computeWorkTreeMap } from "../tree/utils.js";
 
 export const getStatus = (root: string): StatusVsFilesMap => {
   const ignoredPatterns = getIgnoredPatterns(root);

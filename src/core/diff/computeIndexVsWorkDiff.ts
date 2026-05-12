@@ -2,8 +2,8 @@ import { readFileSync } from "fs";
 import { readIndex } from "../index/index.js";
 import { computeDiff } from "./computeDiff.js";
 import { readObject } from "../object/readObject.js";
-import { getIgnoredPatterns } from "../../common/utils/ignoreFileUtils.js";
-import { computeWorkTreeMap } from "../../common/utils/workTreeUtils.js";
+import { getIgnoredPatterns } from "../repo/ignoreFileUtils.js";
+import { computeWorkTreeMap } from "../tree/utils.js";
 import { FileDiff, HashId } from "../../common/types.js";
 
 export const getFileLines = (sha: HashId): string[] => {

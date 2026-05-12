@@ -3,10 +3,7 @@ import fs from "fs";
 import { getFileHash } from "../object/getFileHash.js";
 import { readIndex, writeIndex } from "./index.js";
 import { removeFileFromIndex } from "./remove.js";
-import {
-  getIgnoredPatterns,
-  isIgnored,
-} from "../../common/utils/ignoreFileUtils.js";
+import { getIgnoredPatterns, isIgnored } from "../repo/ignoreFileUtils.js";
 import { MODE } from "../../common/constants.js";
 
 const addFile = (

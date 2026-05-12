@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { getHeadCommit, updateHead } from "../../common/utils/headUtils.js";
+import { getHeadCommit, updateHead } from "../head/utils.js";
 import { writeObject } from "../object/writeObject.js";
 import { writeTreeFromIndex } from "../tree/writeTree.js";
 import { HashId } from "../../common/types.js";

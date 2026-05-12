@@ -1,4 +1,4 @@
-import { getHeadContent } from "../../common/utils/headUtils.js";
+import { getHeadContent } from "../head/utils.js";
 
 export const getCurrentBranch = (): string | undefined => {
   const root = process.cwd();

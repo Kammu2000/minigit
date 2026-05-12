@@ -1,6 +1,6 @@
 import path from "path";
 import { readdirSync, statSync } from "fs";
-import { isIgnored } from "./ignoreFileUtils.js";
+import { isIgnored } from "../repo/ignoreFileUtils.js";
 import { getFileHash } from "../../core/object/getFileHash.js";
 import { HashId } from "../../common/types.js";
 
