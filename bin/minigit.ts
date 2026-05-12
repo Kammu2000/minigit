@@ -1,20 +1,14 @@
 #!/usr/bin/env node
 
-import path from "path";
-import { fileURLToPath } from "url";
-import { parseCLI } from "../src/common/utils/cliUtils.js";
+import { parseCLI } from "../src/cli/parseCLI.js";
+import { getCommand } from "../src/cli/registry.js";
 import { handleError } from "../src/common/helpers/errorHandler.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const { command, args } = parseCLI();
 
 try {
-  const commandPath = path.join(__dirname, "../src/commands/", `${command}.js`);
-  const module = await import(commandPath);
-  const commandFn = module.default;
-  commandFn(args);
+  const commandObj = getCommand(command);
+  commandObj.execute(args);
 } catch (error: unknown) {
   handleError(error);
 }

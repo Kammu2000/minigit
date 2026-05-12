@@ -1,4 +1,4 @@
-import { readIndex } from "./index.js";
+import { readIndex } from "../index/index.js";
 import { getIgnoredPatterns } from "../../common/utils/ignoreFileUtils.js";
 import { computeHeadMap } from "../../common/utils/headUtils.js";
 import {

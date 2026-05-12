@@ -1,5 +1,9 @@
-import logger from "../helpers/logger.js";
-import { CLIInput } from "../types.js";
+import logger from "../common/helpers/logger.js";
+
+type CLIInput = {
+  command: string;
+  args: string[];
+};
 
 export const parseCLI = (): CLIInput => {
   const [command, ...args] = process.argv.slice(2);

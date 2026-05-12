@@ -3,15 +3,15 @@ import { red } from "./helpers/colors.js";
 
 export type HashId = string;
 
-export type HashOptions = {
+export interface HashOptions {
   write?: boolean;
-};
+}
 
-export type TreeEntry = {
+export interface TreeEntry {
   mode: (typeof MODE)[keyof typeof MODE];
   name: string;
   sha: HashId;
-};
+}
 
 export type IndexMap = Map<string, { mode: TreeEntry["mode"]; sha: HashId }>;
 export type HeadpMap = Map<string, HashId>;
@@ -31,38 +31,38 @@ export enum FileSubStatus {
 
 export type StatusVsFilesMap = Record<FileStatus, [FileSubStatus, string][]>;
 
-export type CLIInput = {
-  command: string;
-  args: string[];
-};
-
-export type BlobNode = {
+export interface BlobNode {
   name: string;
   type: (typeof MODE)[keyof typeof MODE];
   hashId: HashId;
-};
+}
 
-export type TreeNode = {
+export interface TreeNode {
   name: string;
   type: (typeof MODE)[keyof typeof MODE];
   children: Array<TreeNode | BlobNode>;
-};
+}
 
-export type ParsedObject = {
+export interface ParsedObject {
   type: string;
   size: number;
   body: Buffer<ArrayBuffer>;
-};
+}
 
-export type EditPosition = {
+export interface EditPosition {
   oldLine: number | null;
   newLine: number | null;
-};
+}
 
-export type Edit = {
+export interface Edit {
   type: "equal" | "inserted" | "deleted";
   content: string;
   position: EditPosition;
-};
+}
+
+export interface FileDiff {
+  filePath: string;
+  edits: Edit[];
+}
 
 export type ColorWrapperFn = typeof red;

@@ -1,8 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { RepositoryAlreadyInitializedError } from "../../common/helpers/errors/minigit.js";
 
 export const init = (): void => {
   const minigit = path.join(process.cwd(), ".minigit");
+
+  if (fs.existsSync(minigit)) {
+    throw new RepositoryAlreadyInitializedError();
+  }
+
   const objects = path.join(minigit, "objects");
   const refs = path.join(minigit, "refs");
   const heads = path.join(minigit, "refs/heads");

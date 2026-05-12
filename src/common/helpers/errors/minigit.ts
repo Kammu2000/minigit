@@ -11,6 +11,16 @@ export abstract class MinigitError extends Error {
   }
 }
 
+export class RepositoryAlreadyInitializedError extends MinigitError {
+  override code: ERROR_CODES = ERROR_CODES.REPOSITORY_ALREADY_INITIALIZED_ERROR;
+
+  constructor() {
+    super(
+      `${ERROR_CODES.REPOSITORY_ALREADY_INITIALIZED_ERROR}: Already a minigit repository`,
+    );
+  }
+}
+
 export class MinigitPathNotFoundError extends MinigitError {
   override code: ERROR_CODES = ERROR_CODES.MINIGIT_PATH_NOT_FOUND_ERROR;
 

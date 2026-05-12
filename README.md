@@ -33,5 +33,5 @@ npm link
 
 ## What's Next
 
-- `diff --staged` — compare files in index vs head commit 
+- `diff --staged` — compare files in index vs head commit
 - `checkout` — first-class branch support

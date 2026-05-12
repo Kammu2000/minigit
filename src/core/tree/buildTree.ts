@@ -1,4 +1,4 @@
-import { readIndex } from "../stage/index.js";
+import { readIndex } from "../index/index.js";
 import { MODE } from "../../common/constants.js";
 import { BlobNode, TreeNode } from "../../common/types.js";
 

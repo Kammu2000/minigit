@@ -2,12 +2,12 @@ import path from "path";
 import fs from "fs";
 import { getFileHash } from "../object/getFileHash.js";
 import { readIndex, writeIndex } from "./index.js";
+import { removeFileFromIndex } from "./remove.js";
 import {
   getIgnoredPatterns,
   isIgnored,
 } from "../../common/utils/ignoreFileUtils.js";
 import { MODE } from "../../common/constants.js";
-import { removeFileFromIndex } from "./remove.js";
 
 const addFile = (
   filePath: string,
