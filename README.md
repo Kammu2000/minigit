@@ -1,17 +1,31 @@
 # minigit
 
-A minimal but useful implementation of git's core internals, built from scratch in Node.js using typescript to understand how git actually works under the hood.
+A minimal but useful implementation of git's core internals, built from scratch in C++ to understand how git actually works under the hood.
 
 ## Why I Built This
 
 Most developers use git daily without knowing what's inside `.git`. I built minigit to understand git's object model — blobs, trees, the index, and content-addressable storage — by implementing them myself.
 
-## Getting Started
+## Prerequisites
+
+- C++23 compiler (Clang 17+ or GCC 13+)
+- CMake 3.25+
+- Ninja
+- [vcpkg](https://vcpkg.io)
+
+## Build
 
 ```bash
-npm install
-npm link
+git clone https://github.com/microsoft/vcpkg.git ~/vcpkg
+~/vcpkg/bootstrap-vcpkg.sh
+
+export VCPKG_ROOT=~/vcpkg
+
+cmake --preset=build
+cmake --build build
 ```
+
+The binary is at `build/minigit`. On the first build, vcpkg installs **openssl** and **zlib** from `vcpkg.json`.
 
 ## Commands
 
@@ -26,10 +40,10 @@ npm link
 | `minigit add <filePath>`          | Stage a file or directory                            |
 | `minigit restore <filePath>`      | Unstage a file                                       |
 | `minigit status`                  | Check current working status of repository           |
-| `minigit commit`                  | Commit changes with the staged files                 |
+| `minigit commit -m <message>`     | Commit changes with the staged files                 |
 | `minigit log`                     | Check commit history of current branch in less pager |
 | `minigit branch`                  | List down all the branches                           |
-| `minigit diff`                    | compare files in index vs working area               |
+| `minigit diff`                    | Compare files in index vs working area               |
 
 ## What's Next
 
