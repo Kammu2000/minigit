@@ -10,11 +10,11 @@
 
 namespace minigit::storage {
 
-ObjectStore::ObjectStore(std::filesystem::path root) : root_(std::move(root)) {}
+ObjectStore::ObjectStore(std::filesystem::path root) : m_root(std::move(root)) {}
 
 std::filesystem::path ObjectStore::objects_dir() const
 {
-    return root_ / ".minigit" / "objects";
+    return m_root / ".minigit" / "objects";
 }
 
 std::vector<std::uint8_t> ObjectStore::build_raw_object(std::string_view type,

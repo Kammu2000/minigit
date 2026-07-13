@@ -24,12 +24,12 @@ class Index
     [[nodiscard]] const model::StagedEntry* find(const std::string& path) const;
     [[nodiscard]] const std::unordered_map<std::string, model::StagedEntry>& entries() const
     {
-        return entries_;
+        return m_entries;
     }
 
   private:
-    std::filesystem::path index_path_;
-    std::unordered_map<std::string, model::StagedEntry> entries_;
+    std::filesystem::path m_index_path;
+    std::unordered_map<std::string, model::StagedEntry> m_entries;
 };
 
 } // namespace minigit::repo

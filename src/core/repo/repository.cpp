@@ -17,8 +17,8 @@ namespace minigit::repo {
 
 Repository::Repository(std::filesystem::path root, storage::ObjectStore objects, Index index,
                        Refs refs, IgnoreRules ignore_rules)
-    : root_(std::move(root)), objects_(std::move(objects)), index_(std::move(index)),
-      refs_(std::move(refs)), ignore_rules_(std::move(ignore_rules))
+    : m_root(std::move(root)), m_objects(std::move(objects)), m_index(std::move(index)),
+      m_refs(std::move(refs)), m_ignore_rules(std::move(ignore_rules))
 {
 }
 
@@ -66,15 +66,15 @@ void Repository::stage(const std::vector<std::string>& paths)
 {
     for (const auto& relative_path : paths)
     {
-        const auto entity_path = root_ / relative_path;
+        const auto entity_path = m_root / relative_path;
         if (!std::filesystem::exists(entity_path))
         {
-            index_.unstage(relative_path);
-            index_.save();
+            m_index.unstage(relative_path);
+            m_index.save();
             continue;
         }
 
-        if (ignore_rules_.is_ignored(relative_path))
+        if (m_ignore_rules.is_ignored(relative_path))
         {
             continue;
         }
@@ -88,41 +88,41 @@ void Repository::stage(const std::vector<std::string>& paths)
                     continue;
                 }
                 const auto rel =
-                    util::normalize_repo_path(std::filesystem::relative(entry.path(), root_));
-                if (ignore_rules_.is_ignored(rel))
+                    util::normalize_repo_path(std::filesystem::relative(entry.path(), m_root));
+                if (m_ignore_rules.is_ignored(rel))
                 {
                     continue;
                 }
-                const auto sha = objects_.hash_file(entry.path(), true);
-                index_.stage(rel, model::StagedEntry{model::FileMode::Blob, sha});
+                const auto sha = m_objects.hash_file(entry.path(), true);
+                m_index.stage(rel, model::StagedEntry{model::FileMode::Blob, sha});
             }
         }
         else if (std::filesystem::is_regular_file(entity_path))
         {
-            const auto sha = objects_.hash_file(entity_path, true);
-            index_.stage(relative_path, model::StagedEntry{model::FileMode::Blob, sha});
+            const auto sha = m_objects.hash_file(entity_path, true);
+            m_index.stage(relative_path, model::StagedEntry{model::FileMode::Blob, sha});
         }
     }
-    index_.save();
+    m_index.save();
 }
 
 void Repository::unstage(const std::string& path)
 {
-    index_.unstage(path);
-    index_.save();
+    m_index.unstage(path);
+    m_index.save();
 }
 
 std::unordered_map<std::string, model::ObjectId> Repository::head_map() const
 {
     std::unordered_map<std::string, model::ObjectId> head_map;
 
-    const auto commit_id = refs_.head_commit();
+    const auto commit_id = m_refs.head_commit();
     if (!commit_id)
     {
         return head_map;
     }
 
-    const auto commit_obj = objects_.read(*commit_id);
+    const auto commit_obj = m_objects.read(*commit_id);
     const std::string commit_body(commit_obj.body.begin(), commit_obj.body.end());
     std::istringstream stream(commit_body);
     std::string line;
@@ -144,7 +144,7 @@ std::unordered_map<std::string, model::ObjectId> Repository::head_map() const
 
     std::function<void(const model::ObjectId&, const std::string&)> walk;
     walk = [&](const model::ObjectId& tree_id, const std::string& current_path) {
-        const auto tree_obj = objects_.read(tree_id);
+        const auto tree_obj = m_objects.read(tree_id);
         const auto entries = tree::TreeCodec::decode(tree_obj.body);
         for (const auto& entry : entries)
         {
@@ -167,9 +167,9 @@ std::unordered_map<std::string, model::ObjectId> Repository::head_map() const
 
 model::StatusReport Repository::status() const
 {
-    WorktreeScanner scanner(root_, ignore_rules_);
+    WorktreeScanner scanner(m_root, m_ignore_rules);
     const auto worktree = scanner.scan();
-    const auto& index_entries = index_.entries();
+    const auto& index_entries = m_index.entries();
     const auto head = head_map();
 
     model::StatusReport report;
@@ -189,7 +189,7 @@ model::StatusReport Repository::status() const
 
     for (const auto& file_path : all_files)
     {
-        const bool in_index = index_.contains(file_path);
+        const bool in_index = m_index.contains(file_path);
         const bool in_worktree = worktree.contains(file_path);
         const bool in_head = head.contains(file_path);
 
@@ -239,14 +239,14 @@ model::StatusReport Repository::status() const
 
 model::ObjectId Repository::write_tree()
 {
-    tree::TreeBuilder builder(objects_);
-    return builder.build_from_index(index_.entries());
+    tree::TreeBuilder builder(m_objects);
+    return builder.build_from_index(m_index.entries());
 }
 
 model::ObjectId Repository::commit(const std::string& message)
 {
     const auto tree_sha = write_tree();
-    const auto parent = refs_.head_commit();
+    const auto parent = m_refs.head_commit();
 
     std::ostringstream body;
     body << "tree " << tree_sha.to_string() << '\n';
@@ -260,15 +260,15 @@ model::ObjectId Repository::commit(const std::string& message)
 
     const std::string body_str = body.str();
     const std::vector<std::uint8_t> body_bytes(body_str.begin(), body_str.end());
-    const auto raw = objects_.build_raw_object("commit", body_bytes);
-    const auto commit_id = objects_.write_object(raw);
-    refs_.update_head(commit_id);
+    const auto raw = m_objects.build_raw_object("commit", body_bytes);
+    const auto commit_id = m_objects.write_object(raw);
+    m_refs.update_head(commit_id);
     return commit_id;
 }
 
 std::string Repository::log() const
 {
-    const auto head = refs_.head_commit();
+    const auto head = m_refs.head_commit();
     if (!head)
     {
         return "";
@@ -279,7 +279,7 @@ std::string Repository::log() const
 
     while (!current.empty())
     {
-        const auto commit_obj = objects_.read(current);
+        const auto commit_obj = m_objects.read(current);
         const std::string body(commit_obj.body.begin(), commit_obj.body.end());
         std::istringstream stream(body);
         std::string line;
@@ -351,9 +351,9 @@ std::string Repository::log() const
 
 std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
 {
-    WorktreeScanner scanner(root_, ignore_rules_);
+    WorktreeScanner scanner(m_root, m_ignore_rules);
     const auto worktree = scanner.scan();
-    const auto& index_entries = index_.entries();
+    const auto& index_entries = m_index.entries();
 
     std::set<std::string> all_files;
     for (const auto& [path, _] : worktree)
@@ -369,7 +369,7 @@ std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
 
     for (const auto& file_path : all_files)
     {
-        const bool in_index = index_.contains(file_path);
+        const bool in_index = m_index.contains(file_path);
         const bool in_worktree = worktree.contains(file_path);
 
         std::vector<std::string> old_lines;
@@ -377,7 +377,7 @@ std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
 
         if (in_index && !in_worktree)
         {
-            const auto obj = objects_.read(index_entries.at(file_path).sha);
+            const auto obj = m_objects.read(index_entries.at(file_path).sha);
             const std::string content(obj.body.begin(), obj.body.end());
             std::istringstream stream(content);
             std::string line;
@@ -390,7 +390,7 @@ std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
         else if (in_index && in_worktree &&
                  index_entries.at(file_path).sha != worktree.at(file_path))
         {
-            const auto obj = objects_.read(index_entries.at(file_path).sha);
+            const auto obj = m_objects.read(index_entries.at(file_path).sha);
             const std::string content(obj.body.begin(), obj.body.end());
             std::istringstream old_stream(content);
             std::string line;
@@ -399,7 +399,7 @@ std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
                 old_lines.push_back(line);
             }
 
-            std::ifstream in(root_ / file_path);
+            std::ifstream in(m_root / file_path);
             while (std::getline(in, line))
             {
                 new_lines.push_back(line);
@@ -418,7 +418,7 @@ std::vector<diff::FileDiff> Repository::diff_index_vs_worktree() const
 
 std::vector<model::TreeEntry> Repository::ls_tree(const model::ObjectId& tree_id) const
 {
-    const auto tree_obj = objects_.read(tree_id);
+    const auto tree_obj = m_objects.read(tree_id);
     return tree::TreeCodec::decode(tree_obj.body);
 }
 

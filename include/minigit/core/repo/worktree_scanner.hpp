@@ -17,8 +17,8 @@ class WorktreeScanner
     [[nodiscard]] std::unordered_map<std::string, model::ObjectId> scan() const;
 
   private:
-    std::filesystem::path root_;
-    const IgnoreRules& ignore_rules_;
+    std::filesystem::path m_root;
+    const IgnoreRules& m_ignore_rules;
 
     void scan_directory(const std::filesystem::path& current_dir,
                         std::unordered_map<std::string, model::ObjectId>& result) const;

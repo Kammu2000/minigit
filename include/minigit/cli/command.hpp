@@ -1,9 +1,9 @@
 #pragma once
 
-#include "minigit/core/repo/repository.hpp"
-
 #include <span>
 #include <string_view>
+
+#include "minigit/core/repo/repository.hpp"
 
 namespace minigit::cli {
 

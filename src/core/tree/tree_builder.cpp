@@ -70,7 +70,7 @@ std::vector<model::TreeEntry> TreeCodec::decode(std::span<const std::uint8_t> bo
     return entries;
 }
 
-TreeBuilder::TreeBuilder(storage::ObjectStore& store) : store_(store) {}
+TreeBuilder::TreeBuilder(storage::ObjectStore& store) : m_store(store) {}
 
 model::ObjectId
 TreeBuilder::build_from_index(const std::unordered_map<std::string, model::StagedEntry>& entries)
@@ -144,7 +144,7 @@ model::ObjectId TreeBuilder::hash_tree(TreeNode& node)
               [](const model::TreeEntry& a, const model::TreeEntry& b) { return a.name < b.name; });
 
     const auto raw = TreeCodec::encode(entries);
-    return store_.write_object(raw);
+    return m_store.write_object(raw);
 }
 
 } // namespace minigit::tree

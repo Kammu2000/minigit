@@ -28,7 +28,7 @@ class TreeBuilder
     build_from_index(const std::unordered_map<std::string, model::StagedEntry>& entries);
 
   private:
-    storage::ObjectStore& store_;
+    storage::ObjectStore& m_store;
 
     struct TreeNode
     {

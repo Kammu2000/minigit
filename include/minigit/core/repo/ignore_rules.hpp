@@ -12,10 +12,10 @@ class IgnoreRules
     explicit IgnoreRules(std::filesystem::path root);
 
     [[nodiscard]] bool is_ignored(const std::string& relative_path) const;
-    [[nodiscard]] const std::vector<std::string>& patterns() const { return patterns_; }
+    [[nodiscard]] const std::vector<std::string>& patterns() const { return m_patterns; }
 
   private:
-    std::vector<std::string> patterns_;
+    std::vector<std::string> m_patterns;
 };
 
 } // namespace minigit::repo

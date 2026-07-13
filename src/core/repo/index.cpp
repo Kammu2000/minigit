@@ -8,17 +8,17 @@
 
 namespace minigit::repo {
 
-Index::Index(std::filesystem::path index_path) : index_path_(std::move(index_path)) {}
+Index::Index(std::filesystem::path index_path) : m_index_path(std::move(index_path)) {}
 
 void Index::load()
 {
-    entries_.clear();
-    if (!std::filesystem::exists(index_path_))
+    m_entries.clear();
+    if (!std::filesystem::exists(m_index_path))
     {
         return;
     }
 
-    std::ifstream in(index_path_);
+    std::ifstream in(m_index_path);
     std::string line;
     while (std::getline(in, line))
     {
@@ -37,7 +37,7 @@ void Index::load()
             continue;
         }
 
-        entries_[path] = model::StagedEntry{model::file_mode_from_string(mode_str),
+        m_entries[path] = model::StagedEntry{model::file_mode_from_string(mode_str),
                                             model::ObjectId::from_hex(sha)};
     }
 }
@@ -45,8 +45,8 @@ void Index::load()
 void Index::save() const
 {
     std::vector<std::string> paths;
-    paths.reserve(entries_.size());
-    for (const auto& [path, _] : entries_)
+    paths.reserve(m_entries.size());
+    for (const auto& [path, _] : m_entries)
     {
         paths.push_back(path);
     }
@@ -55,7 +55,7 @@ void Index::save() const
     std::ostringstream out;
     for (std::size_t i = 0; i < paths.size(); ++i)
     {
-        const auto& entry = entries_.at(paths[i]);
+        const auto& entry = m_entries.at(paths[i]);
         out << model::to_string(entry.mode) << ' ' << paths[i] << ' ' << entry.sha.to_string();
         if (i + 1 < paths.size())
         {
@@ -63,7 +63,7 @@ void Index::save() const
         }
     }
 
-    std::ofstream file(index_path_);
+    std::ofstream file(m_index_path);
     if (!file)
     {
         throw Error(ErrorCode::PathNotFound, "failed to write index file");
@@ -73,23 +73,23 @@ void Index::save() const
 
 void Index::stage(const std::string& path, const model::StagedEntry& entry)
 {
-    entries_[path] = entry;
+    m_entries[path] = entry;
 }
 
 void Index::unstage(const std::string& path)
 {
-    entries_.erase(path);
+    m_entries.erase(path);
 }
 
 bool Index::contains(const std::string& path) const
 {
-    return entries_.find(path) != entries_.end();
+    return m_entries.find(path) != m_entries.end();
 }
 
 const model::StagedEntry* Index::find(const std::string& path) const
 {
-    const auto it = entries_.find(path);
-    if (it == entries_.end())
+    const auto it = m_entries.find(path);
+    if (it == m_entries.end())
     {
         return nullptr;
     }

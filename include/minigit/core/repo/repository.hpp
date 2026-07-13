@@ -35,24 +35,24 @@ class Repository
     [[nodiscard]] std::vector<diff::FileDiff> diff_index_vs_worktree() const;
     [[nodiscard]] std::vector<model::TreeEntry> ls_tree(const model::ObjectId& tree_id) const;
 
-    [[nodiscard]] const std::filesystem::path& root() const { return root_; }
-    [[nodiscard]] storage::ObjectStore& objects() { return objects_; }
-    [[nodiscard]] const storage::ObjectStore& objects() const { return objects_; }
-    [[nodiscard]] Index& index() { return index_; }
-    [[nodiscard]] const Index& index() const { return index_; }
-    [[nodiscard]] Refs& refs() { return refs_; }
-    [[nodiscard]] const Refs& refs() const { return refs_; }
-    [[nodiscard]] const IgnoreRules& ignore_rules() const { return ignore_rules_; }
+    [[nodiscard]] const std::filesystem::path& root() const { return m_root; }
+    [[nodiscard]] storage::ObjectStore& objects() { return m_objects; }
+    [[nodiscard]] const storage::ObjectStore& objects() const { return m_objects; }
+    [[nodiscard]] Index& index() { return m_index; }
+    [[nodiscard]] const Index& index() const { return m_index; }
+    [[nodiscard]] Refs& refs() { return m_refs; }
+    [[nodiscard]] const Refs& refs() const { return m_refs; }
+    [[nodiscard]] const IgnoreRules& ignore_rules() const { return m_ignore_rules; }
 
   private:
     Repository(std::filesystem::path root, storage::ObjectStore objects, Index index, Refs refs,
                IgnoreRules ignore_rules);
 
-    std::filesystem::path root_;
-    storage::ObjectStore objects_;
-    Index index_;
-    Refs refs_;
-    IgnoreRules ignore_rules_;
+    std::filesystem::path m_root;
+    storage::ObjectStore m_objects;
+    Index m_index;
+    Refs m_refs;
+    IgnoreRules m_ignore_rules;
 
     [[nodiscard]] std::unordered_map<std::string, model::ObjectId> head_map() const;
 };

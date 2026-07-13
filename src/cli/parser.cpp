@@ -15,10 +15,12 @@ ParsedCli parse(int argc, char* argv[])
 
     ParsedCli parsed;
     parsed.command = argv[1];
+
     for (int i = 2; i < argc; ++i)
     {
         parsed.args.emplace_back(argv[i]);
     }
+
     return parsed;
 }
 

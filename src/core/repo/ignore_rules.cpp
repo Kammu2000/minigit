@@ -16,14 +16,14 @@ IgnoreRules::IgnoreRules(std::filesystem::path root)
         {
             continue;
         }
-        patterns_.push_back(trimmed);
+        m_patterns.push_back(trimmed);
     }
-    patterns_.push_back(".minigit/");
+    m_patterns.push_back(".minigit/");
 }
 
 bool IgnoreRules::is_ignored(const std::string& relative_path) const
 {
-    for (const auto& pattern : patterns_)
+    for (const auto& pattern : m_patterns)
     {
         if (pattern.ends_with('/'))
         {

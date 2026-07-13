@@ -5,11 +5,11 @@
 
 namespace minigit::repo {
 
-Refs::Refs(std::filesystem::path minigit_root) : minigit_root_(std::move(minigit_root)) {}
+Refs::Refs(std::filesystem::path minigit_root) : m_minigit_root(std::move(minigit_root)) {}
 
 std::string Refs::head_content() const
 {
-    const auto head_path = minigit_root_ / "HEAD";
+    const auto head_path = m_minigit_root / "HEAD";
     if (!std::filesystem::exists(head_path))
     {
         return {};
@@ -38,7 +38,7 @@ std::optional<model::ObjectId> Refs::head_commit() const
         }
 
         const auto ref_path = content.substr(ref_start + 1);
-        const auto absolute_ref = minigit_root_ / ref_path;
+        const auto absolute_ref = m_minigit_root / ref_path;
         if (!std::filesystem::exists(absolute_ref))
         {
             return std::nullopt;
@@ -82,7 +82,7 @@ std::optional<std::string> Refs::current_branch() const
 
 std::vector<std::string> Refs::branches() const
 {
-    const auto heads_path = minigit_root_ / "refs" / "heads";
+    const auto heads_path = m_minigit_root / "refs" / "heads";
     if (!std::filesystem::exists(heads_path))
     {
         throw Error(ErrorCode::PathNotFound,
@@ -119,7 +119,7 @@ void Refs::update_head(const model::ObjectId& commit_id)
         }
 
         const auto ref_path = content.substr(ref_start + 1);
-        const auto absolute_ref = minigit_root_ / ref_path;
+        const auto absolute_ref = m_minigit_root / ref_path;
         std::filesystem::create_directories(absolute_ref.parent_path());
 
         std::ofstream out(absolute_ref);
@@ -127,7 +127,7 @@ void Refs::update_head(const model::ObjectId& commit_id)
         return;
     }
 
-    std::ofstream out(minigit_root_ / "HEAD");
+    std::ofstream out(m_minigit_root / "HEAD");
     out << commit_id.to_string();
 }
 

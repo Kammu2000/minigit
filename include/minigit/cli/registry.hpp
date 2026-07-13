@@ -19,7 +19,7 @@ class CommandRegistry
   private:
     void register_command(std::string_view name, std::unique_ptr<Command> command);
 
-    std::unordered_map<std::string, std::unique_ptr<Command>> commands_;
+    std::unordered_map<std::string, std::unique_ptr<Command>> m_commands;
 };
 
 } // namespace minigit::cli

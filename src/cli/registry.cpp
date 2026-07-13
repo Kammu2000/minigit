@@ -33,17 +33,19 @@ CommandRegistry::CommandRegistry()
 
 void CommandRegistry::register_command(std::string_view name, std::unique_ptr<Command> command)
 {
-    commands_.emplace(std::string(name), std::move(command));
+    m_commands.emplace(std::string(name), std::move(command));
 }
 
 const Command& CommandRegistry::get(std::string_view name) const
 {
-    const auto it = commands_.find(std::string(name));
-    if (it == commands_.end())
+    const auto it = m_commands.find(std::string(name));
+
+    if (it == m_commands.end())
     {
         throw Error(ErrorCode::InvalidCommand,
                     "INVALID_COMMAND_ERROR: unknown command: " + std::string(name));
     }
+
     return *it->second;
 }
 

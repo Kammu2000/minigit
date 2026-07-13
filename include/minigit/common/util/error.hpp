@@ -19,14 +19,14 @@ enum class ErrorCode
 class Error : public std::runtime_error
 {
   public:
-    Error(ErrorCode code, std::string message) : std::runtime_error(std::move(message)), code_(code)
+    Error(ErrorCode code, std::string message) : std::runtime_error(std::move(message)), m_code(code)
     {
     }
 
-    [[nodiscard]] ErrorCode code() const { return code_; }
+    [[nodiscard]] ErrorCode code() const { return m_code; }
 
   private:
-    ErrorCode code_;
+    ErrorCode m_code;
 };
 
 } // namespace minigit

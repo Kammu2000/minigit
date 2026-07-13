@@ -26,7 +26,7 @@ class ObjectStore
     build_raw_object(std::string_view type, std::span<const std::uint8_t> body) const;
 
   private:
-    std::filesystem::path root_;
+    std::filesystem::path m_root;
     std::filesystem::path objects_dir() const;
     void store_raw(const std::vector<std::uint8_t>& raw_object, const model::ObjectId& id);
 };

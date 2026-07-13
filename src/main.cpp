@@ -2,9 +2,9 @@
 
 #include "minigit/cli/parser.hpp"
 #include "minigit/cli/registry.hpp"
-#include "minigit/format/output.hpp"
-#include "minigit/core/repo/repository.hpp"
 #include "minigit/common/util/error.hpp"
+#include "minigit/core/repo/repository.hpp"
+#include "minigit/format/output.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
 
         std::vector<std::string_view> arg_views;
         arg_views.reserve(parsed.args.size());
+
         for (const auto& arg : parsed.args)
         {
             arg_views.push_back(arg);

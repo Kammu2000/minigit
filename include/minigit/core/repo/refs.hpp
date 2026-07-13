@@ -20,7 +20,7 @@ class Refs
     void update_head(const model::ObjectId& commit_id);
 
   private:
-    std::filesystem::path minigit_root_;
+    std::filesystem::path m_minigit_root;
     [[nodiscard]] std::string head_content() const;
 };
 

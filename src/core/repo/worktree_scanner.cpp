@@ -5,14 +5,14 @@
 namespace minigit::repo {
 
 WorktreeScanner::WorktreeScanner(std::filesystem::path root, const IgnoreRules& ignore_rules)
-    : root_(std::move(root)), ignore_rules_(ignore_rules)
+    : m_root(std::move(root)), m_ignore_rules(ignore_rules)
 {
 }
 
 std::unordered_map<std::string, model::ObjectId> WorktreeScanner::scan() const
 {
     std::unordered_map<std::string, model::ObjectId> result;
-    scan_directory(root_, result);
+    scan_directory(m_root, result);
     return result;
 }
 
@@ -22,8 +22,8 @@ void WorktreeScanner::scan_directory(const std::filesystem::path& current_dir,
     for (const auto& entry : std::filesystem::directory_iterator(current_dir))
     {
         const auto relative =
-            util::normalize_repo_path(std::filesystem::relative(entry.path(), root_));
-        if (ignore_rules_.is_ignored(relative))
+            util::normalize_repo_path(std::filesystem::relative(entry.path(), m_root));
+        if (m_ignore_rules.is_ignored(relative))
         {
             continue;
         }
@@ -34,7 +34,7 @@ void WorktreeScanner::scan_directory(const std::filesystem::path& current_dir,
         }
         else if (entry.is_regular_file())
         {
-            storage::ObjectStore store(root_);
+            storage::ObjectStore store(m_root);
             result[relative] = store.hash_file(entry.path(), false);
         }
     }
