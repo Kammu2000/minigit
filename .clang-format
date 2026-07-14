@@ -4,6 +4,7 @@ Language: Cpp
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
+NamespaceIndentation: All
 
 # Line length (important for readability)
 ColumnLimit: 100
