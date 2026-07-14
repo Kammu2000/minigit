@@ -9,7 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
 
-add_executable(minigit
+set(SOURCES
   src/main.cpp
   src/common/util/paths.cpp
   src/core/storage/hashing.cpp
@@ -40,7 +40,8 @@ add_executable(minigit
   src/cli/commands/diff_command.cpp
 )
 
+add_executable(minigit)
+
+target_sources(minigit PRIVATE ${SOURCES})
 target_include_directories(minigit PRIVATE include)
 target_link_libraries(minigit PRIVATE OpenSSL::Crypto ZLIB::ZLIB)
-
-install(TARGETS minigit RUNTIME DESTINATION bin)
