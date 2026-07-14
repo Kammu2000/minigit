@@ -5,11 +5,11 @@
 
 namespace minigit::cli {
 
-int StatusCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
-{
-    (void)args;
-    format::print_status(std::cout, repo->status());
-    return 0;
-}
+    int StatusCommand::execute(repo::Repository* repo,
+                               [[maybe_unused]] std::span<const std::string_view> args) const
+    {
+        format::print_status(std::cout, repo->status());
+        return 0;
+    }
 
 } // namespace minigit::cli

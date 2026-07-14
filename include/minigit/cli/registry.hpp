@@ -9,17 +9,17 @@
 
 namespace minigit::cli {
 
-class CommandRegistry
-{
-  public:
-    CommandRegistry();
+    class CommandRegistry
+    {
+      public:
+        CommandRegistry();
 
-    [[nodiscard]] const Command& get(std::string_view name) const;
+        [[nodiscard]] const Command& get(std::string_view name) const;
 
-  private:
-    void register_command(std::string_view name, std::unique_ptr<Command> command);
+      private:
+        void register_command(std::string_view name, std::unique_ptr<Command> command);
 
-    std::unordered_map<std::string, std::unique_ptr<Command>> m_commands;
-};
+        std::unordered_map<std::string, std::unique_ptr<Command>> m_commands;
+    };
 
 } // namespace minigit::cli

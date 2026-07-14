@@ -6,16 +6,17 @@
 
 namespace minigit::cli {
 
-int LsTreeCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
-{
-    if (args.empty())
+    int LsTreeCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
     {
-        throw Error(ErrorCode::InvalidCommand,
-                    "INVALID_COMMAND_ERROR: sha was not passed in command arguments");
+        if (args.empty())
+        {
+            throw Error(ErrorCode::InvalidCommand,
+                        "INVALID_COMMAND_ERROR: sha was not passed in command arguments");
+        }
+
+        const auto entries = repo->ls_tree(model::ObjectId::from_hex(args[0]));
+        format::print_tree(std::cout, entries);
+        return 0;
     }
-    const auto entries = repo->ls_tree(model::ObjectId::from_hex(args[0]));
-    format::print_tree(std::cout, entries);
-    return 0;
-}
 
 } // namespace minigit::cli

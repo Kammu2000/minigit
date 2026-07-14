@@ -3,11 +3,11 @@
 
 namespace minigit::cli {
 
-int LogCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
-{
-    (void)args;
-    format::print_log_pager(repo->log());
-    return 0;
-}
+    int LogCommand::execute(repo::Repository* repo,
+                            [[maybe_unused]] std::span<const std::string_view> args) const
+    {
+        format::print_log_pager(repo->log());
+        return 0;
+    }
 
 } // namespace minigit::cli

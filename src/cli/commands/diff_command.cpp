@@ -5,11 +5,11 @@
 
 namespace minigit::cli {
 
-int DiffCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
-{
-    (void)args;
-    format::print_diff(std::cout, repo->diff_index_vs_worktree());
-    return 0;
-}
+    int DiffCommand::execute(repo::Repository* repo,
+                             [[maybe_unused]] std::span<const std::string_view> args) const
+    {
+        format::print_diff(std::cout, repo->diff_index_vs_worktree());
+        return 0;
+    }
 
 } // namespace minigit::cli

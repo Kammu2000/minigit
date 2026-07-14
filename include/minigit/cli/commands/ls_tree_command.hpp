@@ -4,10 +4,10 @@
 
 namespace minigit::cli {
 
-class LsTreeCommand : public Command
-{
-  public:
-    int execute(repo::Repository* repo, std::span<const std::string_view> args) const override;
-};
+    class LsTreeCommand : public Command
+    {
+      public:
+        int execute(repo::Repository* repo, std::span<const std::string_view> args) const override;
+    };
 
 } // namespace minigit::cli
