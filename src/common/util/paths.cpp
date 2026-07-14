@@ -2,14 +2,14 @@
 
 namespace minigit::util {
 
-std::string normalize_repo_path(const std::filesystem::path& path)
-{
-    std::string normalized = path.generic_string();
-    if (normalized == ".")
+    std::string normalize_repo_path(const std::filesystem::path& path)
     {
-        return "";
+        std::string normalized = path.generic_string();
+        if (normalized == ".")
+        {
+            return "";
+        }
+        return normalized;
     }
-    return normalized;
-}
 
 } // namespace minigit::util

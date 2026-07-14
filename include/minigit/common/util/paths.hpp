@@ -5,6 +5,6 @@
 
 namespace minigit::util {
 
-std::string normalize_repo_path(const std::filesystem::path& path);
+    std::string normalize_repo_path(const std::filesystem::path& path);
 
 } // namespace minigit::util
