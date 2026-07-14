@@ -15,38 +15,38 @@
 
 namespace minigit::cli {
 
-CommandRegistry::CommandRegistry()
-{
-    register_command("init", std::make_unique<InitCommand>());
-    register_command("hash-object", std::make_unique<HashObjectCommand>());
-    register_command("cat-file", std::make_unique<CatFileCommand>());
-    register_command("write-tree", std::make_unique<WriteTreeCommand>());
-    register_command("ls-tree", std::make_unique<LsTreeCommand>());
-    register_command("add", std::make_unique<AddCommand>());
-    register_command("restore", std::make_unique<RestoreCommand>());
-    register_command("status", std::make_unique<StatusCommand>());
-    register_command("commit", std::make_unique<CommitCommand>());
-    register_command("log", std::make_unique<LogCommand>());
-    register_command("branch", std::make_unique<BranchCommand>());
-    register_command("diff", std::make_unique<DiffCommand>());
-}
-
-void CommandRegistry::register_command(std::string_view name, std::unique_ptr<Command> command)
-{
-    m_commands.emplace(std::string(name), std::move(command));
-}
-
-const Command& CommandRegistry::get(std::string_view name) const
-{
-    const auto it = m_commands.find(std::string(name));
-
-    if (it == m_commands.end())
+    CommandRegistry::CommandRegistry()
     {
-        throw Error(ErrorCode::InvalidCommand,
-                    "INVALID_COMMAND_ERROR: unknown command: " + std::string(name));
+        register_command("init", std::make_unique<InitCommand>());
+        register_command("hash-object", std::make_unique<HashObjectCommand>());
+        register_command("cat-file", std::make_unique<CatFileCommand>());
+        register_command("write-tree", std::make_unique<WriteTreeCommand>());
+        register_command("ls-tree", std::make_unique<LsTreeCommand>());
+        register_command("add", std::make_unique<AddCommand>());
+        register_command("restore", std::make_unique<RestoreCommand>());
+        register_command("status", std::make_unique<StatusCommand>());
+        register_command("commit", std::make_unique<CommitCommand>());
+        register_command("log", std::make_unique<LogCommand>());
+        register_command("branch", std::make_unique<BranchCommand>());
+        register_command("diff", std::make_unique<DiffCommand>());
     }
 
-    return *it->second;
-}
+    void CommandRegistry::register_command(std::string_view name, std::unique_ptr<Command> command)
+    {
+        m_commands.emplace(std::string(name), std::move(command));
+    }
+
+    const Command& CommandRegistry::get(std::string_view name) const
+    {
+        const auto it = m_commands.find(std::string(name));
+
+        if (it == m_commands.end())
+        {
+            throw Error(ErrorCode::InvalidCommand,
+                        "INVALID_COMMAND_ERROR: unknown command: " + std::string(name));
+        }
+
+        return *it->second;
+    }
 
 } // namespace minigit::cli
