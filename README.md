@@ -38,7 +38,7 @@ The binary is at `build/minigit`. On the first build, vcpkg installs **openssl**
 | `minigit write-tree`              | Get updated sha of root directory using staged files |
 | `minigit ls-tree <sha>`           | List the contents of a tree object                   |
 | `minigit add <filePath>`          | Stage a file or directory                            |
-| `minigit restore <filePath>`      | Unstage a file                                       |
+| `minigit restore <filePath>...`   | Unstage one or more files/directories                |
 | `minigit status`                  | Check current working status of repository           |
 | `minigit commit -m <message>`     | Commit changes with the staged files                 |
 | `minigit log`                     | Check commit history of current branch in less pager |

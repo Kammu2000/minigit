@@ -8,92 +8,100 @@
 
 namespace minigit::repo {
 
-Index::Index(std::filesystem::path index_path) : m_index_path(std::move(index_path)) {}
+    Index::Index(std::filesystem::path index_path) : m_index_path(std::move(index_path)) {}
 
-void Index::load()
-{
-    m_entries.clear();
-    if (!std::filesystem::exists(m_index_path))
+    void Index::load()
     {
-        return;
-    }
+        m_entries.clear();
 
-    std::ifstream in(m_index_path);
-    std::string line;
-    while (std::getline(in, line))
-    {
-        if (line.empty())
+        if (!std::filesystem::exists(m_index_path))
         {
-            continue;
+            return;
         }
 
-        std::istringstream stream(line);
-        std::string mode_str;
-        std::string path;
-        std::string sha;
-        stream >> mode_str >> path >> sha;
-        if (mode_str.empty() || path.empty() || sha.empty())
+        std::ifstream in(m_index_path);
+        std::string line;
+
+        while (std::getline(in, line))
         {
-            continue;
-        }
+            if (line.empty())
+            {
+                continue;
+            }
 
-        m_entries[path] = model::StagedEntry{model::file_mode_from_string(mode_str),
-                                            model::ObjectId::from_hex(sha)};
-    }
-}
+            std::istringstream stream(line);
+            std::string mode_str;
+            std::string path;
+            std::string sha;
+            stream >> mode_str >> path >> sha;
 
-void Index::save() const
-{
-    std::vector<std::string> paths;
-    paths.reserve(m_entries.size());
-    for (const auto& [path, _] : m_entries)
-    {
-        paths.push_back(path);
-    }
-    std::sort(paths.begin(), paths.end());
+            if (mode_str.empty() || path.empty() || sha.empty())
+            {
+                continue;
+            }
 
-    std::ostringstream out;
-    for (std::size_t i = 0; i < paths.size(); ++i)
-    {
-        const auto& entry = m_entries.at(paths[i]);
-        out << model::to_string(entry.mode) << ' ' << paths[i] << ' ' << entry.sha.to_string();
-        if (i + 1 < paths.size())
-        {
-            out << '\n';
+            m_entries[path] = model::StagedEntry{model::file_mode_from_string(mode_str),
+                                                 model::ObjectId::from_hex(sha)};
         }
     }
 
-    std::ofstream file(m_index_path);
-    if (!file)
+    void Index::save() const
     {
-        throw Error(ErrorCode::PathNotFound, "failed to write index file");
+        std::vector<std::string> paths;
+        paths.reserve(m_entries.size());
+
+        for (const auto& [path, _] : m_entries)
+        {
+            paths.push_back(path);
+        }
+
+        std::sort(paths.begin(), paths.end());
+        std::ostringstream out;
+
+        for (std::size_t i = 0; i < paths.size(); ++i)
+        {
+            const auto& entry = m_entries.at(paths[i]);
+            out << model::to_string(entry.mode) << ' ' << paths[i] << ' ' << entry.sha.to_string();
+
+            if (i + 1 < paths.size())
+            {
+                out << '\n';
+            }
+        }
+
+        std::ofstream file(m_index_path);
+
+        if (!file)
+        {
+            throw Error(ErrorCode::PathNotFound, "failed to write index file");
+        }
+
+        file << out.str();
     }
-    file << out.str();
-}
 
-void Index::stage(const std::string& path, const model::StagedEntry& entry)
-{
-    m_entries[path] = entry;
-}
-
-void Index::unstage(const std::string& path)
-{
-    m_entries.erase(path);
-}
-
-bool Index::contains(const std::string& path) const
-{
-    return m_entries.find(path) != m_entries.end();
-}
-
-const model::StagedEntry* Index::find(const std::string& path) const
-{
-    const auto it = m_entries.find(path);
-    if (it == m_entries.end())
+    void Index::stage(const std::string& path, const model::StagedEntry& entry)
     {
-        return nullptr;
+        m_entries[path] = entry;
     }
-    return &it->second;
-}
+
+    void Index::unstage(const std::string& path)
+    {
+        m_entries.erase(path);
+    }
+
+    bool Index::contains(const std::string& path) const
+    {
+        return m_entries.contains(path);
+    }
+
+    const model::StagedEntry* Index::find(const std::string& path) const
+    {
+        const auto it = m_entries.find(path);
+        if (it == m_entries.end())
+        {
+            return nullptr;
+        }
+        return &it->second;
+    }
 
 } // namespace minigit::repo
