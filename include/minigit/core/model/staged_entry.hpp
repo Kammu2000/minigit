@@ -5,10 +5,10 @@
 
 namespace minigit::model {
 
-struct StagedEntry
-{
-    FileMode mode = FileMode::Blob;
-    ObjectId sha;
-};
+    struct StagedEntry
+    {
+        FileMode mode = FileMode::Blob;
+        ObjectId sha;
+    };
 
 } // namespace minigit::model
