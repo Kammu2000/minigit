@@ -14,6 +14,7 @@ namespace minigit {
         InvalidCommand,
         ObjectNotFound,
         ObjectCorrupted,
+        InvalidObjectId,
         FileNotFound,
     };
 

@@ -13,9 +13,9 @@ namespace minigit::model {
 
         ObjectId() = default;
 
-        explicit ObjectId(std::string hex) : m_hex(std::move(hex)) {}
+        explicit ObjectId(std::string hex);
 
-        static ObjectId from_hex(std::string_view hex) { return ObjectId(std::string(hex)); }
+        static ObjectId from_hex(std::string_view hex);
 
         [[nodiscard]] const std::string& to_string() const { return m_hex; }
         [[nodiscard]] std::string_view view() const { return m_hex; }

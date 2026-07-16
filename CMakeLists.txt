@@ -12,6 +12,7 @@ find_package(ZLIB REQUIRED)
 set(SOURCES
   src/main.cpp
   src/common/util/paths.cpp
+  src/core/model/object_id.cpp
   src/core/storage/hashing.cpp
   src/core/storage/compression.cpp
   src/core/storage/object_store.cpp
