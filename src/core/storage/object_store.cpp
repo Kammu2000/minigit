@@ -111,12 +111,11 @@ namespace minigit::storage {
         }
 
         const std::string type_str = header.substr(0, space);
-        const std::string size_str = header.substr(space + 1);
+        [[maybe_unused]] const std::string size_str = header.substr(space + 1);
 
         model::GitObject object;
         object.type = model::object_type_from_string(type_str);
         object.body.assign(null_index + 1, buffer.end());
-        (void)size_str;
         return object;
     }
 
