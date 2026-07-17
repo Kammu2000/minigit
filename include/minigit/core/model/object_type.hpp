@@ -1,11 +1,12 @@
 #pragma once
 
+#include <cstdint>
 #include <format>
 #include <string_view>
 
 namespace minigit::model {
 
-    enum class ObjectType : uint8_t
+    enum class ObjectType : std::uint8_t
     {
         Blob,
         Tree,
