@@ -6,7 +6,7 @@
 
 namespace minigit {
 
-    enum class ErrorCode : uint8_t
+    enum class ErrorCode : std::uint8_t
     {
         RepoAlreadyExists,
         RepoNotFound,
