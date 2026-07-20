@@ -1,10 +1,27 @@
+#include <format>
 #include <iostream>
+#include <string>
+#include <string_view>
+#include <vector>
 
 #include "minigit/cli/parser.hpp"
 #include "minigit/cli/registry.hpp"
 #include "minigit/common/util/error.hpp"
 #include "minigit/core/repo/repository.hpp"
 #include "minigit/format/output.hpp"
+
+std::vector<std::string_view> get_adapted_args(const std::vector<std::string>& args)
+{
+    std::vector<std::string_view> arg_views;
+    arg_views.reserve(args.size());
+
+    for (const auto& arg : args)
+    {
+        arg_views.push_back(arg);
+    }
+
+    return arg_views;
+}
 
 int main(int argc, char* argv[])
 {
@@ -13,13 +30,7 @@ int main(int argc, char* argv[])
         const auto parsed = minigit::cli::parse(argc, argv);
         const minigit::cli::CommandRegistry registry;
 
-        std::vector<std::string_view> arg_views;
-        arg_views.reserve(parsed.args.size());
-
-        for (const auto& arg : parsed.args)
-        {
-            arg_views.push_back(arg);
-        }
+        std::vector<std::string_view> arg_views = get_adapted_args(parsed.args);
 
         if (parsed.command == "init")
         {
@@ -36,7 +47,7 @@ int main(int argc, char* argv[])
     }
     catch (const std::exception& error)
     {
-        minigit::format::print_error(std::cerr, std::string("[INTERNAL-ERROR]: ") + error.what());
+        minigit::format::print_error(std::cerr, std::format("[INTERNAL-ERROR]: {}", error.what()));
         return 1;
     }
 }
