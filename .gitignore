@@ -3,3 +3,4 @@ build/
 CMakeUserPresets.json
 .minigit/
 .minigitIgnore
+compile_commands.json

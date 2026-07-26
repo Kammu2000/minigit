@@ -1,6 +1,7 @@
 #pragma once
 
 #include <format>
+#include "minigit/common/util/assert.hpp"
 
 namespace minigit::model {
 
@@ -20,7 +21,7 @@ namespace minigit::model {
                 return "040000";
         }
 
-        throw std::runtime_error("Unknown file mode conversion to string");
+        unreachable_();
     }
 
     inline FileMode file_mode_from_string(std::string_view mode)
@@ -30,7 +31,7 @@ namespace minigit::model {
         if (mode == "040000")
             return FileMode::Tree;
 
-        throw std::runtime_error(std::format("Unknown object mode: {}", mode));
+        unreachable_();
     }
 
 } // namespace minigit::model
