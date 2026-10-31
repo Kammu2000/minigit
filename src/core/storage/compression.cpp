@@ -1,6 +1,7 @@
-#include <stdexcept>
 #include <zlib.h>
 
+#include "minigit/common/util/assert.hpp"
+#include "minigit/common/util/error.hpp"
 #include "minigit/core/storage/compression.hpp"
 
 namespace minigit::storage {
@@ -13,10 +14,7 @@ namespace minigit::storage {
 
         const int result = compress2(output.data(), &output_size, data.data(),
                                      static_cast<uLong>(data.size()), Z_BEST_SPEED);
-        if (result != Z_OK)
-        {
-            throw std::runtime_error("zlib compression failed");
-        }
+        invariant_(result == Z_OK, "zlib compression failed");
 
         output.resize(output_size);
         return output;
@@ -39,7 +37,9 @@ namespace minigit::storage {
 
         if (result != Z_OK)
         {
-            throw std::runtime_error("zlib decompression failed");
+            throw Error(ErrorCode::ObjectCorrupted,
+                        "OBJECT_CORRUPTED_ERROR: zlib decompression failed, object data may be "
+                        "corrupted");
         }
 
         output.resize(output_size);

@@ -22,6 +22,7 @@ namespace minigit::repo {
     {
     }
 
+    /// Initialize repo.
     Repository Repository::init(const std::filesystem::path& root)
     {
         const auto minigit = root / ".minigit";

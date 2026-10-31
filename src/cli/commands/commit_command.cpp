@@ -1,12 +1,15 @@
 #include <print>
 
 #include "minigit/cli/commands/commit_command.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 
 namespace minigit::cli {
 
     int CommitCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "commit command requires an open repository");
+
         if (args.size() < 2 || args[0] != "-m")
         {
             throw Error(

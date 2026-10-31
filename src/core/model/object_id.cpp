@@ -1,3 +1,4 @@
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 #include "minigit/core/model/object_id.hpp"
 
@@ -84,7 +85,11 @@ namespace minigit::model {
 
     std::array<std::uint8_t, ObjectId::kRawSize> ObjectId::raw_bytes() const
     {
-        validate_hex(m_hex);
+        // By construction (constructor/from_hex both validate), m_hex is always either empty or
+        // a well-formed 40-char hex string. raw_bytes() is documented to require the latter.
+        precondition_(!m_hex.empty(), "ObjectId::raw_bytes requires a non-empty object id");
+        invariant_(m_hex.size() == kHexLength,
+                  "ObjectId invariant violated: hex must be 40 characters");
 
         std::array<std::uint8_t, kRawSize> bytes{};
         for (std::size_t i = 0; i < kRawSize; ++i)

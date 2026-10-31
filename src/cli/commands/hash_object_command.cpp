@@ -1,6 +1,7 @@
 #include <print>
 
 #include "minigit/cli/commands/hash_object_command.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 
 namespace minigit::cli {
@@ -8,6 +9,8 @@ namespace minigit::cli {
     int HashObjectCommand::execute(repo::Repository* repo,
                                    std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "hash-object command requires an open repository");
+
         if (args.empty())
         {
             throw Error(ErrorCode::InvalidCommand,

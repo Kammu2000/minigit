@@ -2,11 +2,14 @@
 #include <vector>
 
 #include "minigit/cli/commands/add_command.hpp"
+#include "minigit/common/util/assert.hpp"
 
 namespace minigit::cli {
 
     int AddCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "add command requires an open repository");
+
         std::vector<std::string> paths;
         paths.reserve(args.size());
 

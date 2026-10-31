@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "minigit/cli/commands/branch_command.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/format/output.hpp"
 
 namespace minigit::cli {
@@ -8,6 +9,8 @@ namespace minigit::cli {
     int BranchCommand::execute(repo::Repository* repo,
                                [[maybe_unused]] std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "branch command requires an open repository");
+
         const auto branches = repo->refs().branches();
         const auto current = repo->refs().current_branch();
         format::print_branches(std::cout, branches, current);

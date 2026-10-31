@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "minigit/cli/commands/restore_command.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 
 namespace minigit::cli {
@@ -9,6 +10,8 @@ namespace minigit::cli {
     int RestoreCommand::execute(repo::Repository* repo,
                                 std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "restore command requires an open repository");
+
         if (args.empty())
         {
             throw Error(ErrorCode::InvalidCommand,

@@ -22,6 +22,7 @@ namespace minigit::repo {
     class Repository
     {
       public:
+        /// initialize repo
         [[nodiscard]] static Repository init(const std::filesystem::path& root);
         [[nodiscard]] static Repository open(const std::filesystem::path& root);
 
