@@ -49,3 +49,8 @@ The binary is at `build/minigit`. On the first build, vcpkg installs **openssl**
 
 - `diff --staged` — compare files in index vs head commit
 - `checkout` — first-class branch support
+
+## Further Reading
+
+- [Exception Handling & Contracts](docs/exception-handling.md) — when to use
+  `minigit::Error` vs. the contract macros in `assert.hpp`

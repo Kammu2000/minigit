@@ -2,6 +2,7 @@
 #include <sstream>
 #include <utility>
 
+#include "minigit/common/util/assert.hpp"
 #include "minigit/core/model/file_mode.hpp"
 #include "minigit/core/tree/tree_builder.hpp"
 
@@ -30,6 +31,9 @@ namespace minigit::tree {
 
             std::span<const std::uint8_t> read_bytes(std::size_t count)
             {
+                precondition_(count <= m_remaining.size(),
+                              "not enough bytes remaining to decode tree object");
+
                 const auto bytes = m_remaining.first(count);
                 m_remaining = m_remaining.subspan(count);
                 return bytes;

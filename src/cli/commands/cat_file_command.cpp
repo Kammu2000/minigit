@@ -6,6 +6,7 @@
 #include "minigit/format/output.hpp"
 #include "minigit/core/model/object_type.hpp"
 #include "minigit/core/tree/tree_builder.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 
 namespace minigit::cli {
@@ -13,6 +14,8 @@ namespace minigit::cli {
     int CatFileCommand::execute(repo::Repository* repo,
                                 std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "cat-file command requires an open repository");
+
         if (args.size() < 2)
         {
             const std::string message = args.empty() ? "Flag was not passed to the command"
@@ -47,9 +50,7 @@ namespace minigit::cli {
                 }
             }
 
-            throw Error(ErrorCode::ObjectCorrupted,
-                        std::format("OBJECT_CORRUPTED_ERROR: object with hashId - {} is corrupted",
-                                    hash_id.to_string()));
+            unreachable_("invalid ObjectType enum value");
         }
 
         throw Error(ErrorCode::InvalidCommand,

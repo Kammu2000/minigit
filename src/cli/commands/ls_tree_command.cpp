@@ -2,12 +2,15 @@
 
 #include "minigit/cli/commands/ls_tree_command.hpp"
 #include "minigit/format/output.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/common/util/error.hpp"
 
 namespace minigit::cli {
 
     int LsTreeCommand::execute(repo::Repository* repo, std::span<const std::string_view> args) const
     {
+        precondition_(repo != nullptr, "ls-tree command requires an open repository");
+
         if (args.empty())
         {
             throw Error(ErrorCode::InvalidCommand,

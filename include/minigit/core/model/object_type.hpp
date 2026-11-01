@@ -4,6 +4,8 @@
 #include <format>
 #include <string_view>
 
+#include "minigit/common/util/assert.hpp"
+
 namespace minigit::model {
 
     enum class ObjectType : std::uint8_t
@@ -25,7 +27,7 @@ namespace minigit::model {
                 return "commit";
         }
 
-        throw std::runtime_error("Unknown object type conversion to string");
+        unreachable_("invalid ObjectType enum value");
     }
 
     inline ObjectType object_type_from_string(std::string_view type)
@@ -37,7 +39,7 @@ namespace minigit::model {
         if (type == "commit")
             return ObjectType::Commit;
 
-        throw std::runtime_error(std::format("Unknown object type: {}", type));
+        unreachable_(std::format("unknown object type: {}", type));
     }
 
 } // namespace minigit::model

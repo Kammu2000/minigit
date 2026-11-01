@@ -3,6 +3,7 @@
 
 #include "minigit/format/colors.hpp"
 #include "minigit/format/output.hpp"
+#include "minigit/common/util/assert.hpp"
 #include "minigit/core/model/file_mode.hpp"
 #include "minigit/core/model/status.hpp"
 
@@ -23,7 +24,7 @@ namespace minigit::format {
                 case model::ChangeKind::Untracked:
                     return "";
             }
-            return "";
+            unreachable_("invalid ChangeKind enum value");
         }
 
     } // namespace
